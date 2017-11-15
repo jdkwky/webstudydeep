@@ -1,11 +1,35 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
 	<title>study Es6 Promise </title>
 	<link rel="stylesheet" type="text/css" href="">
-	<script type="text/javascript" src='./js/studyPromise.js'></script>
+	<!-- <script type="text/javascript" src='./js/studyPromise.js'></script> -->
+	<script type="text/javascript" src='js/lazyman.js'></script>
 </head>
 <body>
-	
+	<script type="text/javascript">
+		var promiseTest=new Promise(function(resolve,reject){
+			console.log('hello word');
+			resolve('124');
+		});
+		var test=Promise.resolve();
+		console.log('====================');
+		var functionPromise=function(){
+			var p=new Promise(function(resolve,reject){
+				console.log('hehehhe');
+				resolve();
+			});
+		}
+		functionPromise();
+		console.log('====================');
+		promiseTest.then(promiseTest).then(function(value){
+			var pp=new Promise(function(resolve,reject){
+				console.log('hahahha');
+				resolve();
+			});
+		}).then(function(){
+			console.log('in then');
+		});
+	</script>
 </body>
 </html>

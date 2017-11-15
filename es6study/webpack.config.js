@@ -1,0 +1,13 @@
+module.exports={
+	devtool:'eval-source-map',
+	entry:[__dirname+'/js/newFeatureofEs6.js',__dirname+'/js/iteratorDemo.js',__dirname+'/js/test.js'],
+	output:{
+		path:__dirname+'/public',
+		filename:'bundle.js'
+	},
+	devServer:{
+		contentBase:'./public',
+		historyApiFallback:true,
+		inline:true,
+	}
+};
