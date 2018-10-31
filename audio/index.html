@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="./index.js"></script>
+    <!-- <link rel="import" href="template.html"> -->
+    <title>audio</title>
+</head>
+<style>
+    .wrapper{
+        position: relative;
+    }
+    .line{
+        position:absolute;
+        top: 0;
+        left: 0;
+        width: 1px;
+        height: 100%;
+        background: black;
+    }
+    .template-h1{
+        color: green !important;
+    }
+    
+    h1{
+        color: red !important;
+    }
+    audio::-webkit-media-controls-play-button{
+        background: red;
+    }
+
+    my-list::template-h1{
+        background: green;
+    }
+</style>
+
+<body>
+    <audio src="./concert-crowd.mp3" controls='controls'> 您的浏览器不支持audio </audio>
+    <input type="file" name="file" id="audio" />
+    <button id="byxhr">通过xhr获取数据</button>
+    <div class="wrapper">
+        <canvas id="canvas" class="audio" height="400"></canvas>
+        <div id="line" class="line"></div>
+    </div>
+    <button id="playAudio">播放</button>
+    <button id="playAudioHalf"> 播放一段时间 </button>
+    <button id="drawAgain">重画</button>
+
+
+
+    <script>
+        // const template = document.getElementById('temp');
+        // const copy = document.importNode(template.content, true);
+        // copy.getElementById('title').innerHTML = "hello world";
+        // const shadowRoot = div.attachShadow({ mode: 'closed' });
+        // shadowRoot.appendChild(copy);
+
+    </script>
+
+
+    <script>
+        let dataList = [
+            { slot: 'animal', name: 'cat' }
+        ];
+        // 注册组建
+        class MyList extends HTMLElement {
+            static get observedAttributes(){ return ['id','data']}
+            constructor() {
+                super();
+                const root = this.attachShadow({ mode: 'open' });
+                const template = document.getElementById('list');
+                root.appendChild(document.importNode(template.content, true));
+            }
+            attributeChangedCallback(attrName, oldVal, newVal) {
+                console.log('===========================');
+                console.log(attrName, oldVal, newVal);
+                console.log('===========================');
+            }
+        }
+        customElements.define('my-list', MyList);
+
+        // 修改组件中的数据
+        setTimeout(function () {
+            document.getElementById('cat').innerHTML = "hello cat ";
+            document.getElementById('cat').setAttribute('id','hello-cat');
+        }, 1000);
+        setTimeout(function () {
+            document.getElementById('testlist').setAttribute('data','hello-cat');
+        }, 2000);
+
+    </script>
+
+    <!-- start  custom Element  -->
+    <template id="list">
+        <style>
+            .template-h1{
+                color:red
+            }
+        </style>
+        <div>
+            <h1 pseudo="template-h1" class="template-h1">Others</h1>
+            <slot></slot>
+        </div>
+        <div>
+            <h1>Animals</h1>
+            <slot name="animal"></slot>
+        </div>
+        <div>
+            <h1>Fruits</h1>
+            <slot name="fruit"></slot>
+        </div>
+        
+    </template>
+    <style>
+        .template-h1 {
+            background: rebeccapurple;
+        }
+    </style>
+
+    <my-list id="testlist">
+        <div class="template-h1" id="cat" slot="animal">Cat</div>
+        <div data="test" slot="fruit">Apple</div>
+        <div slot="fruit">Banana</div>
+        <div slot="other">flower</div>
+        <div>pencil</div>
+        <div slot="animal">Dog</div>
+        <div slot="fruit">peach</div>
+        <div>red</div>
+    </my-list>
+
+
+    <!-- custom element end  -->
+</body>
+
+</html>

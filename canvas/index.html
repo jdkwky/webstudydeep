@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="./index.js"></script>
+    <title>canvas</title>
+    <style>
+        body{
+            background: #eee;
+        }
+        #controls{
+            position: absolute;
+            left: 25px;
+            top: 25px;
+        }
+        #canvas{
+            background: #fff;
+            cursor: pointer;
+            margin-left: 10px;
+            margin-top: 10px;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <canvas width="600" height="400" id="canvas">
+        canvas not supported
+    </canvas>
+
+    <div id="controls">
+        Stroke color: 
+        <select id="strokeStyleSelect">
+            <option value="red">red</option>
+            <option value="green">green</option>
+            <option value="blue">blue</option>
+            <option value="orange">orange</option>
+            <option value="cornflowerblue">cornflowerblue</option>
+            <option value="navy">navy</option>
+            <option value="purple">purple</option>
+            <option value="goldenrod">goldenrod</option>
+        </select>
+        Guidwores:
+        <input type="checkbox" id="guidewireCheckbox" />
+        <input type="button" id="eraseAllButton" value="Erase all" />
+    </div>
+
+</body>
+</html>
