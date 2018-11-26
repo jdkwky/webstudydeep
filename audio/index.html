@@ -32,9 +32,15 @@
         background: red;
     }
 
-    my-list::template-h1{
-        background: green;
+    
+    #title{
+        background: green !important;
     }
+
+    my-list::-webkit-media-controls-play-button{
+        background: blue;
+    }
+
 </style>
 
 <body>
@@ -50,13 +56,24 @@
     <button id="drawAgain">重画</button>
 
 
-
+    <template id="temp">
+        <style>
+            #title {
+                background: red;
+            }
+        </style>
+        <div id="title"></div>
+    </template>
+    <div id="div">
+        <div>test
+        </div>
+    </div>
     <script>
-        // const template = document.getElementById('temp');
-        // const copy = document.importNode(template.content, true);
-        // copy.getElementById('title').innerHTML = "hello world";
-        // const shadowRoot = div.attachShadow({ mode: 'closed' });
-        // shadowRoot.appendChild(copy);
+        const template = document.getElementById('temp');
+        const copy = document.importNode(template.content, true);
+        copy.getElementById('title').innerHTML = "hello world";
+        const shadowRoot = div.attachShadow({ mode: 'closed' });
+        shadowRoot.appendChild(copy);
 
     </script>
 
@@ -67,7 +84,7 @@
         ];
         // 注册组建
         class MyList extends HTMLElement {
-            static get observedAttributes(){ return ['id','data']}
+            static get observedAttributes() { return ['id', 'data'] }
             constructor() {
                 super();
                 const root = this.attachShadow({ mode: 'open' });
@@ -85,10 +102,10 @@
         // 修改组件中的数据
         setTimeout(function () {
             document.getElementById('cat').innerHTML = "hello cat ";
-            document.getElementById('cat').setAttribute('id','hello-cat');
+            document.getElementById('cat').setAttribute('id', 'hello-cat');
         }, 1000);
         setTimeout(function () {
-            document.getElementById('testlist').setAttribute('data','hello-cat');
+            document.getElementById('testlist').setAttribute('data', 'hello-cat');
         }, 2000);
 
     </script>
@@ -96,12 +113,13 @@
     <!-- start  custom Element  -->
     <template id="list">
         <style>
-            .template-h1{
-                color:red
+            .template-h1 {
+                color: red
             }
+            :host-context(.template-h1)
         </style>
         <div>
-            <h1 pseudo="template-h1" class="template-h1">Others</h1>
+            <h1 pseudo="-webkit-media-controls-play-button"  class="template-h1">Others</h1>
             <slot></slot>
         </div>
         <div>
@@ -112,14 +130,18 @@
             <h1>Fruits</h1>
             <slot name="fruit"></slot>
         </div>
-        
+
     </template>
     <style>
         .template-h1 {
             background: rebeccapurple;
         }
-    </style>
 
+        /* my-list::host-context(.template-h1) {
+            background: yellow;
+        } */
+    </style>
+    <!--自定义组建  -->
     <my-list id="testlist">
         <div class="template-h1" id="cat" slot="animal">Cat</div>
         <div data="test" slot="fruit">Apple</div>

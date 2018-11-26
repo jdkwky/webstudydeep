@@ -15,6 +15,9 @@ window.onload = function() {
                 console.log(event.target.result);
                 offAudioCtx.decodeAudioData(event.target.result).then(res=>{
                     playFun(res);
+                    // console.log('===========================');
+                    // console.log(res);
+                    // console.log('===========================');
                 });
             };
             fr.readAsArrayBuffer(files[0]);
@@ -33,6 +36,9 @@ window.onload = function() {
 
         ajaxRequest.onload = function() {
             var audioData = ajaxRequest.response;
+            console.log('===========================');
+            console.log('audioData',audioData);
+            console.log('===========================');
             offAudioCtx.decodeAudioData(
                 audioData,
                 function(buffer) {

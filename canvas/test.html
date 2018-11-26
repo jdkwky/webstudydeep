@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const menus = [
+            {
+                name: '新建任务锚点1',
+                meta: {
+                    icon: 'icon-home',
+                    expanded: false
+                },
+                show: false,
+                path: '/createtask-basic-info',
+                redirect: '/createtask',
+                subs: [
+                    {
+                        name: '修改任务锚点1',
+                        meta: {
+                            icon: 'icon-home',
+                            expanded: false
+                        },
+                        show: false,
+                        path: '/edittask-basic-info',
+                        redirect: '/createtask/edittask'
+                    }
+                ]
+            },
+            {
+                name: '新建任务锚点2',
+                meta: {
+                    icon: 'icon-home',
+                    expanded: false
+                },
+                show: false,
+                path: '/createtask-task-price',
+                redirect: '/createtask',
+                subs: [
+                    {
+                        name: '编辑任务锚点2',
+                        meta: {
+                            icon: 'icon-home',
+                            expanded: false
+                        },
+                        show: false,
+                        path: '/edittask-task-price',
+                        redirect: '/createtask/edittask'
+                    }
+                ]
+            },
+            {
+                name: '新建任务锚点3',
+                meta: {
+                    icon: 'icon-home',
+                    expanded: false
+                },
+                show: false,
+                path: '/createtask-task-desc',
+                redirect: '/createtask',
+                subs: [
+                    {
+                        name: '编辑任务锚点3',
+                        meta: {
+                            icon: 'icon-home',
+                            expanded: false
+                        },
+                        show: false,
+                        path: '/edittask-task-desc',
+                        redirect: '/createtask/edittask'
+                    }
+                ]
+            },
+            {
+                name: '新建任务锚点4',
+                meta: {
+                    icon: 'icon-home',
+                    expanded: false
+                },
+                show: false,
+                path: '/createtask-data-totalRecords',
+                redirect: '/createtask',
+                subs: [
+                    {
+                        name: '修改任务锚点4',
+                        meta: {
+                            icon: 'icon-home',
+                            expanded: false
+                        },
+                        show: false,
+                        path: '/edittask-data-totalRecords',
+                        redirect: '/createtask/edittask'
+                    }
+                ]
+            },
+            {
+                name: '新建任务锚点5',
+                meta: {
+                    icon: 'icon-home',
+                    expanded: false
+                },
+                show: false,
+                path: '/createtask-data-channel',
+                redirect: '/createtask',
+                subs: [
+                    {
+                        name: '编辑任务锚点5',
+                        meta: {
+                            icon: 'icon-home',
+                            expanded: false
+                        },
+                        show: false,
+                        path: '/edittask-data-channel',
+                        redirect: '/createtask/edittask'
+                    }
+                ]
+            },
+            {
+                name: '新建任务',
+                meta: {
+                    icon: 'icon-xjrw',
+                    expanded: false
+                },
+                show: true,
+                path: '/createtask',
+                component: _ => import('../../views/task/createTask.vue')
+            },
+            {
+                name: '修改新建任务',
+                meta: {
+                    icon: 'icon-xjrw',
+                    expanded: false
+                },
+                show: false,
+                path: '/createtask/edittask',
+                component: _ => import('../../views/task/editTask.vue')
+            },
+            {
+                name: '模板编辑',
+                meta: {},
+                show: false,
+                path: '/createtask/edittemplate',
+                component: _ => import('../../views/task/editTemplate.vue')
+            },
+            {
+                name: '预览试标',
+                meta: {},
+                show: false,
+                path: '/testlabel/audiolabel',
+                component: _ => import('../../views/testLabel/audioLabel.vue')
+            },
+            {
+                name: '任务管理',
+                meta: {
+                    icon: 'icon-rwgl',
+                    expanded: true
+                },
+                show: true,
+                path:'/taskmanage',
+                subs: [
+                    {
+                        name: '标注任务管理',
+                        meta: {},
+                        show: true,
+                        path: '/taskmanage/skitchtask',
+                        component: _ => import('../../views/taskManage/skitchTask.vue'),
+                        subs: [
+                            {
+                                name: '标注任务详情',
+                                meta: {},
+                                show: false,
+                                path: '/taskmanage/skitchtask/detail',
+                                component: _ => import('../../views/taskManage/detail.vue')
+                            },
+                            {
+                                name: '标注任务进度详情',
+                                meta: {},
+                                show: false,
+                                path: '/taskmanage/skitchtask/taskprogressdetail',
+                                component: _ => import('../../views/taskManage/taskProgressDetail.vue'),
+                                beforeEnter: (to, from, next) => {
+                                    const { query } = from;
+                                    const { taskId } = query;
+                                    const { path } = to;
+                                    const toQuery = to.query;
+                                    if (path == '/taskmanage/skitchtask/taskprogressdetail' && !toQuery.id) {
+                                        next({
+                                            path: path,
+                                            query: {
+                                                id: taskId
+                                            }
+                                        });
+                                    } else {
+                                        next();
+                                    }
+                                },
+                                subs: [
+                                    {
+                                        name: '标注任务管理详情',
+                                        meta: {},
+                                        show: false,
+                                        path: '/taskmanage/skitchtask/progressdetail',
+                                        component: _ => import('../../views/taskManage/progressDetail.vue')
+                                    }
+                                ]
+                            },
+                            {
+                                name: '任务验收',
+                                meta: {
+                                    expanded: true
+                                },
+                                show: true,
+                                path: '/taskmanage/skitchtask/taskchecklist',
+                                component() {
+                                    return import('../../views/taskManage/taskCheckList.vue');
+                                }
+                            },
+                            {
+                                name: '语音数据验收',
+                                meta: {
+                                    expanded: true
+                                },
+                                show: true,
+                                path: '/taskmanage/skitchtask/voicecheck',
+                                component() {
+                                    return import('../../views/taskManage/voiceCheck.vue');
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: '账号管理',
+                meta: {
+                    icon: 'icon-zhgl',
+                    expanded: true
+                },
+                show: true,
+                subs: [
+                    {
+                        name: '公会账号管理',
+                        meta: {},
+                        show: true,
+                        path: '/account/union',
+                        component: _ => import('../../views/account/union.vue')
+                    }
+                ]
+            }
+        ];
+
+        
+        var getMenus = function (path, menus, node) {
+            const pathList = [];
+            if (menus) {
+                for (let i = 0, len = menus.length; i < len; i++) {
+                    if (menus[i].path == path) {
+                        pathList.push(menus[i]);
+                        // 添加父节点
+                        if (node) {
+                            pathList.push(node);
+                        }
+
+                    } else {
+                        // 二级及以下路由
+                        const list = getMenus(path, menus[i].subs, menus[i]);
+                        
+                        if (list.length > 0) {
+                            if(node){
+                                pathList.push(node);
+                            }
+                           list.forEach(val =>{
+                               pathList.push(val);
+                           })
+                        }
+                    }
+                }
+            }
+            return pathList;
+        }
+
+        let list = getMenus('/taskmanage/skitchtask/taskchecklist', menus);
+        console.log('===========================');
+        console.log('list',list);
+        console.log('===========================');
+
+    </script>
+</body>
+
+</html>
