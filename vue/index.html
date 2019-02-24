@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="./index.js"></script>
+    <title>vue</title>
+</head>
+<body>
+    <div id='app'>{{ message }}</div>
+    <div id="bpp">{{ a.a.a }}</div>
+
+    <input type="text" id="text" />
+    <script>
+        var app = new Vue({
+            data:{
+                message:'hello Vue!',
+                a:""
+            },
+            el:'#bpp',
+            directives:{
+                
+            },
+            provide(){
+                return {
+                    getData(){
+                        console.log('123')
+                    }
+                }
+            },
+            beforeCreate(){
+                console.log(this.message);
+
+            },
+            mounted(){
+                // this.$forceUpdate();
+                // this.$on(['test1','test2'],function(){
+                //     console.log('$on');
+                // })
+                // this.$emit('test1')
+                // console.log('===========================');
+                // console.log('this.$forceUpdate',this.$forceUpdate);
+                // console.log('===========================');
+                setTimeout(()=>{
+                    // this.a.a.a = 'test'
+                },1000)
+            }
+        });
+
+        var obj = {};
+        console.log(Vue.util)
+        // app.$mount('#app');
+
+
+        function trigger(el,type){
+            const e = document.createEvent('HTMLEvents');
+            e.initEvent(type,true,true);
+            el.dispatchEvent(e);
+        }
+        var dom = document.getElementById('text');
+        dom.addEventListener('compositionstart', onCompositionStart)
+        dom.addEventListener('compositionend', onCompositionEnd)
+        function onCompositionStart(e){
+            e.target.composing = true
+            console.log('===========================');
+            console.log('e',e);
+            console.log('===========================');
+        }
+        function onCompositionEnd(e){
+            e.target.composing = false
+            console.log('===========================');
+            console.log('e',e);
+            console.log('===========================');
+            trigger(dom,'ceshi');
+        }
+        dom.addEventListener('ceshi',function(value){
+            console.log(value)
+        })
+
+    </script>
+</body>
+</html>

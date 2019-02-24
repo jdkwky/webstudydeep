@@ -55,7 +55,7 @@ window.onload = function() {
     }
     
     document.getElementById('byxhr').onclick = function(){
-        getAudioByXHR('https://wavesurfer-js.org/example/split-channels/stereo.mp3');
+        getAudioByXHR('https://ks3-cn-beijing.ksyun.com/videodb/smarttag/extractAudio/2000073586/f70284f8-8033-43dc-82fd-abd19d9539ac/1.mp3');
     }
 
     function playFun(data) {
