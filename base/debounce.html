@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .wrap{
+            width: 100%;
+            height: 500px;
+            background: red;
+            overflow: auto;
+        }
+        .scroll{
+            width:100%;
+            height: 900px;
+            background: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap" onscroll="debounceScroll(event)">
+        <div class="scroll">
+
+            hhshhss
+        </div>
+    </div>
+    <script>
+        var debounceScroll = debounce(handleScroll,500);
+        function debounce (fn, ms, imediate){
+            var timmer = null;
+            var _this = this;
+            return function(){
+                
+                var args = arguments;
+                if(imediate){
+                    fn.apply(this,args);
+                }
+                if(timmer){
+                    clearTimeout(timmer);
+                    timmer = null;
+                    return;
+                }
+                timmer = setTimeout(function(){
+                    fn.apply(_this,args);
+                    timmer = null;
+                },ms);
+            }
+        }
+        function handleScroll(event){
+        }
+    </script>
+</body>
+</html>

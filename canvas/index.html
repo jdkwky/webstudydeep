@@ -27,6 +27,7 @@
 </head>
 
 <body>
+    <a href="#/history.html" rel="noopener noreferrer">history</a>
     <canvas width="600" height="400" id="canvas">
         canvas not supported
     </canvas>
@@ -49,6 +50,37 @@
         <input type="checkbox" id="guidewireCheckbox" />
         <input type="button" id="eraseAllButton" value="Erase all" />
     </div>
+
+    <button onclick="handleDownload()">下载</button>
+
+    <a href="#a1">jump a1</a>
+    <a href="#a2">jumpa2</a>
+
+
+
+    <div id="a1" style="height:300px; background: green"></div>
+    <div id="a2" style="height: 200px; background: red"></div>
+
+    <a href="#">回到顶部</a>
+
+    <a href="http://baidu.com" referrer="origin"> referrer</a>
+    <a href="./history1.html"> history1 (不存在的)</a>
+    <a href="./history.html"> history (存在的)</a>
+
+    <script>
+        window.onhashchange = function(event){
+            console.log('===========================');
+            console.log('onhashchange',event);
+            console.log('===========================');
+        }
+
+        function handleDownload(){
+            const a = document.createElement('a');
+            a.href = document.getElementById('canvas').toDataURL();
+            a.download = 'canvas.png';
+            a.click();
+        }
+    </script>
 
 </body>
 

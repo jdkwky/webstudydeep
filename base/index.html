@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="./index.js"></script>
+    <script src="./promise.js"></script>
+    <title>base</title>
+</head>
+<body>
+    <script>
+        const num = 12;
+        const str = 'nihao';
+        const boo = false ;
+        const array = [1,3,4];
+        const obj = { name:'wku', age: 18 };
+        const objparam = { name:[1,2,3], info:{ name:{ name:'wky' } } };
+        const arrayobj = [{name:'wky'},13];
+        const nu = {name: null};
+        const objBoo = {name : new Boolean(false)};
+        const nuarray = [undefined, null];
+        const num1 =jsonStringify(num);
+        const str1 =jsonStringify(str);
+        const boo1 = jsonStringify(boo);
+        const array1 = jsonStringify(array);
+        const obj1 = jsonStringify(obj);
+        const objparam1 =jsonStringify(objparam);
+        const arrayobj1 = jsonStringify(arrayobj);
+        const nu1 = jsonStringify(nu);
+        const objBoo1 = jsonStringify(objBoo);
+        const nuarray1 = jsonStringify(nuarray);
+        const newBoo = new Boolean(true);
+        const newBoo1 = jsonStringify(newBoo);
+
+        // console.log(num1,str1,boo1,array1,obj1,objparam1,arrayobj1);
+        // console.log('nu1',nu1);
+        // console.log('objBoo1',objBoo1);
+        // console.log('nuarray1',nuarray1);
+        // console.log('newBoo1',newBoo1);  
+
+
+        var p = new Promise(function( resolve,reject ){
+            resolve('123');
+        });
+        console.log(p);
+        p.then(res =>{
+            console.log(res);
+        })
+    </script>
+    <script>
+        // function test(name,age){
+        //     console.log('===========================');
+        //     console.log('name',this.name,'age',this.age);
+        //     console.log('===========================');
+        // }
+        // const objCall = {
+        //     name: 'wky',
+        //     age: 18
+        // }
+        // const age = 20;
+        // const name = 'yc';
+        
+        // test.call1(objCall);
+        // test.call1(null);
+        // // test();
+        // console.log('===========================');
+        // console.log('window',window.name, this.name, this.age, window.age);
+        // console.log('===========================');
+    </script>
+</body>
+</html>
