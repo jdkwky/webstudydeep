@@ -1,0 +1,70 @@
+.test-text-align{
+    text-align: center
+}
+
+.inline-block{
+    display: inline-block;
+}
+
+.margin-test{
+    margin: 0 auto;
+}
+
+.img-test{
+    background: greenyellow;
+    display: flex;
+
+}
+
+.dib-baseline {
+    display: inline-block; width: 150px; height: 150px;
+    border: 1px solid #cad5eb; background-color: #f0f3f9;
+}
+
+.flex-wrap{
+    display: flex;
+    width: 800px;
+   
+    background: rebeccapurple;
+    
+}
+.flex-item{
+    width: 100px;
+    height: 100px;
+    background: greenyellow;
+    margin: 5px;
+}
+
+.flex-item-basis{
+    flex-basis: 1
+}
+
+/* #parent{
+    display: flex;
+}
+#left { 
+    margin-right: 10px;
+    height: 500px;
+    background-color: #f00;
+}
+#right {
+    height: 500px;
+    background-color: #0f0;
+    flex: 1;  
+} */
+
+
+/* bfc */
+
+#left {
+    margin-right: 10px;
+    float: left;  /*只设置浮动,不设宽度*/
+    height: 500px;
+    background-color: #f00;
+}
+#right {
+    overflow: hidden;  /*触发bfc*/
+    height: 500px;
+    background-color: #0f0;
+}
+
