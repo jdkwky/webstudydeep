@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>dialog test</title>
+    <script src="./test.js"></script>
+    <style>
+        body {
+            overflow-y: auto;
+        }
+
+        .drag {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+
+<body>
+    <div data-name="divtest" title="dddd" id="div">divtest
+        <p id="p"></p>
+    </div>
+    <span id="span">spanTest</span>
+    <img id="img" src="" alt="" srcset="">
+
+    <div class="drag" draggable="true" id="drag">
+        drag
+    </div>
+</body>
+
+</html>
