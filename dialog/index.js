@@ -5,6 +5,7 @@ class Dialog {
         this.title = title || 'test';
         this.$dialog = null;
         this._openDialog();
+
     }
 
     _getDialog() {
