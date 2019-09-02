@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>bfc</title>
+</head>
+
+<body>
+    <!-- 
+        bfc 全称  块格式上下文 (block formatting context) 
+
+        视觉格式化模型： 视觉格式化模型定位了盒的生成，盒主要包含了块盒、行内盒、匿名盒  没有名字不能被选择器选中的盒以及一些实验性的盒。
+        盒的类型由 display决定
+
+        块盒有以下特性：
+            1） 当元素的css属性是 block  list-item 或table 时， 它是块级元素  block-level
+            2)  视觉呈现为块，竖直排列
+            3） 块级盒参与
+            4） 没个块级元素至少生成一个块级盒。 一些元素如（li）生成额外的盒来放置项目符号，不过多数元素只生成一个块级盒
+
+
+        行内盒：
+            1）元素 css 属性为inline-block inline inline-table时，称他为行内级元素
+            2）视觉上 将内容排列称多行；典型的如段落内容，文本，图片
+
+        
+            BFC创建法：
+                1）根元素或其它包含它的元素
+                2）浮动
+                3）绝对定位元素
+                4）行内块
+                5）表格单元格
+                6）弹性盒 （flex）
+
+
+
+            https://juejin.im/post/59b73d5bf265da064618731d
+
+
+     -->
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+        }
+
+        .wrap {
+            background: #e5e5e5;
+            /* zoom: 1;
+            overflow: hidden; */
+            margin-bottom: 20px;
+        }
+
+        /* .wrap::after {
+            clear: both;
+            content: '';
+            display: block;
+        } */
+
+        .left {
+            background: pink;
+            height: 100px;
+            width: 100px;
+            /* float: left; */
+            opacity: 0.4;
+            /* margin-top: 10px; */
+        }
+
+        .right {
+            background: green;
+            height: 50px;
+            width: 200px;
+            /* margin-top: 20px; */
+            overflow: hidden;
+        }
+
+        .clear {
+            clear: both;
+        }
+
+        .wrap2 {
+            margin-top: -20px;
+            height: 100px;
+            background: yellow;
+        }
+    </style>
+
+    <div class="wrap">
+        <div class="left">llllllllllllll</div>
+        <div class="right">rrrrrrrrrrrrr</div>
+    </div>
+    <div class="wrap2"></div>
+
+</body>
+
+</html>
