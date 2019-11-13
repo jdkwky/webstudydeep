@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>二叉树</title>
+</head>
+
+<body>
+    <script>
+        // 根据中序遍历和前序遍历树的结构还原原始树的结构
+        // 前序遍历  [1,2,4,7,3,5,6,8]
+        // 中序遍历   [4,7,2,1,5,3,8,6]
+
+        // 前序遍历  根节点 左子树 右子树
+        // 中序遍历  左子树 根节点 右子树
+        var list1 = [1, 2, 4, 7, 3, 5, 6, 8];
+        var list2 = [4, 7, 2, 1, 5, 3, 8, 6];
+        function formatTree(list1, list2) {
+            var treeList = [];
+            if (list1.length > 0 && list2.length > 0) {
+                // 根节点
+                var node = { node: list1[0], children: [] };
+
+                var left = [];
+                var right = [];
+                var leftFlag = true;
+                for (let i = 0; i < list2.length; i++) {
+                    if (list2[i] === node.node) {
+                        list2.splice(i, 1);
+                        leftFlag = false;
+                    }
+
+                    if (leftFlag) {
+                        left.push(list2[i]);
+                    } else {
+                        right.push(list2[i]);
+                    }
+                }
+
+
+                list1.splice(0, 1);
+
+
+
+
+                var pLeft = list1.slice(0, left.length);
+
+
+                var pRight = list1.slice(left.length, list1.length);
+
+
+
+                if (left.length >>> 0 == 1) {
+                    node.children.push({
+                        node: pLeft[0],
+                        tag: 'left'
+                    });
+                } else if (left.length > 0) {
+                    var children = formatTree(pLeft, left);
+                    console.log(children, 'letf children');
+                    node.children.push({ node: children, tag: 'left' });
+                }
+                if (right.length >>> 0 == 1) {
+
+                    node.children.push({
+                        node: pRight[0],
+                        tag: 'right'
+                    });
+
+                } else if (right.length > 0) {
+                    var children = formatTree(pRight, right);
+                    node.children.push({ node: children, tag: 'right' });
+                }
+            }
+            treeList.push(node);
+
+
+            return treeList;
+        }
+
+        var result = formatTree(list1, list2);
+        console.log(result, 'result');
+
+
+        //测试splice
+
+        var list = [1,2,3,4,5];
+        for(let i = 0 , len = list.length ;i < len ; i ++){
+            if(i == 1){
+                list.splice(i,1)
+            }
+            console.log(list[i], i);
+        }
+       
+        
+
+
+    </script>
+</body>
+
+</html>
