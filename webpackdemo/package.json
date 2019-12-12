@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "webpack-dev-server": "^2.9.4"
+    "webpack-dev-server": "^3.9.0"
   },
   "devDependencies": {
     "Babel": "0.0.1",
