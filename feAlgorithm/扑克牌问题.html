@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>扑克牌问题</title>
+</head>
+
+<body>
+    <script>
+        // 有一堆扑克牌，将牌堆第一张放到桌子上，再将接下来的牌堆的第一张放到牌底，如此往复；
+
+        // 最后桌子上的牌顺序为： (牌底) 1,2,3,4,5,6,7,8,9,10,11,12,13 (牌顶)；
+
+        // 问：原来那堆牌的顺序，用函数实现。   
+
+
+        // 生成 从牌顶开始pop unshift
+
+        var list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+
+
+
+        // 给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+
+        // 示例:
+
+        // 输入: [0, 1, 0, 3, 12]
+        // 输出: [1, 3, 12, 0, 0]
+        // 说明:
+
+        // 必须在原数组上操作，不能拷贝额外的数组。
+
+        // 尽量减少操作次数。
+
+        function move(list) {
+            let j = 0;
+            for (let i = 0; i < list.length - j; i++) {
+                if (list[i] === 0) {
+                    list.splice(i, 1);
+                    i--;
+                    j++;
+                    list.push(0);
+                }
+
+            }
+        }
+
+        var list = [0, 1, 0, 3, 12];
+        move(list);
+        console.log(list, 'list');
+
+
+    </script>
+</body>
+
+</html>

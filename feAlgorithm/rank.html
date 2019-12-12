@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>rank</title>
+</head>
+
+<body>
+    <script>
+        // 冒泡排序
+        function rank1(list) {
+            var temp;
+            for (var i = 0, len = list.length; i < len; i++) {
+                for (var j = i + 1; j < len; j++) {
+                    if (list[i] > list[j]) {
+                        temp = list[i];
+                        list[i] = list[j];
+                        list[j] = temp;
+                    }
+                }
+            }
+        }
+        var list = [2, 6, 1, 8, 2, 3, 5];
+        rank1(list);
+        console.log(list, 'list');
+
+
+
+
+    </script>
+</body>
+
+</html>

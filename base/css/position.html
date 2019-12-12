@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>position</title>
+    <style>
+        /* margin 父子 或者子子margin重叠的原因：
+            所有毗邻的两个或者多个盒元素的margin会合并为一， 并共享之 
+            毗邻： 同级或者嵌套的盒元素，并且他们之间没有非空内容、padding、border分割
+
+            解决方法：  1. 增加非空内容 或者增加padding  border 
+                      2.  触发BFC 使两个相邻的盒元素存在于不同的盒模型上下文中
+                        BFC触发方式：
+                            1. overflow: hidden , scroll
+                            2. position: absolute
+                            3. float: left , right 
+                            4. display: flex , inline-block, table-cell, table-caption, inline-flex
+        */
+        body,
+        html {
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .position-wrap {
+            /* border: 1px solid sienna; */
+            padding: 1px;
+            background: hotpink;
+            /* overflow: hidden; */
+            /* position: absolute; */
+        }
+
+        .position-item {
+            border: 1px solid green;
+            height: 100px;
+            margin-top: 20px;
+        }
+
+        /* .position-item+.position-item {
+            margin-top: 10px;
+        } */
+
+        .position-releative {
+            /* margin-top: 20px; */
+            /* relative 相对于原始位置的偏移 */
+            position: relative;
+            top: 10px;
+            left: 10px;
+        }
+
+        .position-absolute {
+            /* absolute 相对于父级元素 父级元素不能为static 如果父级元素为static 则相对于根元素 */
+            position: absolute;
+            background: khaki;
+            width: 100px;
+            top: 10px;
+            left: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="position-wrap">
+        <!-- <img src="" alt=""> -->
+        <div class="position-item"></div>
+        <!-- <div class="position-item position-releative"></div>
+        <div class="position-item position-absolute"></div> -->
+    </div>
+</body>
+
+</html>

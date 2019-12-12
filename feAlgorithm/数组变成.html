@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>数组变成树</title>
+</head>
+
+<body>
+    <script>
+        const list = [
+            { id: 1, name: 'A', parentId: 0 },
+            { id: 2, name: 'B', parentId: 0 },
+            { id: 3, name: 'C', parentId: 1 },
+            { id: 4, name: 'D', parentId: 1 },
+            { id: 5, name: 'E', parentId: 2 },
+            { id: 6, name: 'F', parentId: 3 },
+            { id: 7, name: 'G', parentId: 2 },
+            { id: 8, name: 'H', parentId: 4 }
+        ];
+
+        function getTree(node = {}, treeList = []) {
+
+            if (node.parentId == 0) {
+                treeList.push(node);
+            } else {
+                treeList.forEach(val => {
+                    if (val.id === node.parentId) {
+                        if (val.children) {
+                            val.children.push(node);
+                        } else {
+                            val.children = [node]
+                        }
+                    } else if (val.children) {
+                        getTree(node, val.children);
+                    }
+                })
+
+            }
+        }
+        function changeListToTree(list = []) {
+            list = list.sort((val1, val2) => val1.parentId - val2.parentId);
+            const treeList = [];
+            list.forEach(val => {
+                getTree(val, treeList)
+            })
+            return treeList;
+        }
+
+
+        const treeList = changeListToTree(list);
+        console.log(treeList, 'treeList');
+
+
+
+
+        // function convert(list = []) {
+        //     const res = []
+        //     const map = list.reduce((res, v) => (res[v.id] = v, res), {});
+
+        //     for (const item of list) {
+        //         if (item.parentId === 0) {
+        //             res.push(item)
+        //             continue
+        //         }
+        //         if (item.parentId in map) {
+        //             const parent = map[item.parentId]
+        //             parent.children = parent.children || []
+        //             parent.children.push(item)
+        //         }
+        //     }
+        //     return res
+        // }
+
+        // convert(list);
+
+
+
+
+    </script>
+</body>
+
+</html>

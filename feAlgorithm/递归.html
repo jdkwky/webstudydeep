@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 问题1: 将命中disabledData数据的disabled: true，反之disabled: false。要是子元disabled都是true。则当前元素disabled: true
+        // 问题2：找到指定id的所有父级元素
+        // 问题3：数组转换成tree结构，tree结构转换成数组
+        // const list = [
+        //     { id: 1, name: 'A', parentId: 0 },
+        //     { id: 2, name: 'B', parentId: 0 },
+        //     { id: 3, name: 'C', parentId: 1 },
+        //     { id: 4, name: 'D', parentId: 1 },
+        //     { id: 5, name: 'E', parentId: 2 },
+        //     { id: 6, name: 'F', parentId: 3 },
+        //     { id: 7, name: 'G', parentId: 2 },
+        //     { id: 8, name: 'H', parentId: 4 }
+        // ];
+
+        // 转换后的结果如下
+        // const result = [
+        //     {
+        //         id: 1,
+        //         name: 'A',
+
+        //         children: [
+        //             {
+        //                 id: 3,
+        //                 name: 'C',
+
+        //                 children: [
+        //                     {
+        //                         id: 6,
+        //                         name: 'F',
+
+        //                     },
+        //                     {
+        //                         id: 16,
+        //                         name: 'L',
+
+        //                     }
+        //                 ]
+        //             },
+        //             {
+        //                 id: 4,
+        //                 name: 'D',
+        //                 children: [
+        //                     {
+        //                         id: 8,
+        //                         name: 'H',
+        //                     }
+        //                 ]
+        //             }
+        //         ]
+        //     }
+        // ];
+        // const disabledData = ['2-1-1', '2-1-1', '2-1-1'];
+
+
+
+
+
+        // function changeTreeToList(data = [], parentNode) {
+        //     let allList = [];
+        //     for (let i = 0, len = data.length; i < len; i++) {
+        //         allList.push({
+        //             ...data[i],
+        //             parentId: parentNode && parentNode.id || 0,
+        //         })
+        //         if (data[i].children && data[i].children.length > 0) {
+        //             const list = changeTreeToList(data[i].children, data[i]);
+        //             allList = [...allList, ...list];
+        //         }
+        //     }
+        //     return allList;
+        // }
+        // const list = changeTreeToList(result, null);
+        // console.log(list, 'list');
+
+
+        // 斐波那契数列
+
+        function fibo(n) {
+            if (n == 1 || n == 2) {
+                return 1;
+            } else {
+                return fibo(n - 1) + fibo(n - 2);
+            }
+        }
+
+        const v1 = fibo(1);
+        // const v2 = fibo(2);
+        // const v3 = fibo(3);
+        // const v4 = fibo(4);
+        console.log(fibo(8));
+
+
+        function sum(n) {
+            if (n == 1 || n == 2) {
+                return 1;
+            }
+
+            let pre1 = 1;
+            let pre2 = 1;
+            for (let i = 2; i < n; i++) {
+                pre1 = pre1 + pre2;
+                [pre1, pre2] = [pre2, pre1]
+            }
+            return pre2;
+        }
+
+        console.log(sum(8), 'fibo2');
+
+        var fuc1 = (n => {
+            const number = [1, 1];
+            return function (n) {
+                if (number[n]) {
+                    return number[n];
+                }
+                for (let index = 2; index < n; index++) {
+                    // number.push( number[index - 1] + number[index - 2]);
+                    number[index] = number[index - 1] + number[index - 2];
+                }
+                return number[n - 1];
+            }
+        })();
+
+        console.log(fuc1(10), fuc1)
+
+    </script>
+</body>
+
+</html>
