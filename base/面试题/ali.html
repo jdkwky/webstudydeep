@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,36 @@
     <title>ali面试题</title>
     <script src="./ali.js"></script>
 </head>
-<body>
-    
+
+<body onclick="handleClick(event)">
+    <a href="#">test</a>
+    <a href="#">test</a>
+    <a href="#">test</a>
+    <a href="http://baidu.com">test</a>
+    <script>
+        function handleClick(event) {
+            // event.stopPropagation();
+            event.preventDefault();
+            const target = event.target || {};
+            const href = target.href;
+            if (/^(http|https):/.test(href)) {
+                // window.open(href);
+                modeAClick(href);
+            } else {
+                console.log(href, 'href');
+            }
+
+        }
+
+        function modeAClick(href) {
+            const a = document.createElement('a');
+            a.href = href;
+            document.body.appendChild(a);
+            a.click();
+            document.body.remove(a);
+
+        }
+    </script>
 </body>
+
 </html>

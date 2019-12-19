@@ -13,9 +13,9 @@
  */
 function getIntersection() {
     let args = [];
-    if(arguments.length == 0){
+    if (arguments.length == 0) {
         return null;
-    }else if (arguments.length == 1){
+    } else if (arguments.length == 1) {
         return arguments[0]
     }
 
@@ -27,7 +27,7 @@ function getIntersection() {
         }
         args.push(arguments[i]);
     }
-   
+
     args = args.sort((a, b) => a[0] - b[0]);
 
 
@@ -35,7 +35,7 @@ function getIntersection() {
     for (let j = 1, jlen = args.length; j < jlen; j++) {
         const [t1, t2] = args[j];
         const [r1, r2] = result;
-        
+
         if (t1 === t2) {
             //    点
             if (t1 >= r1 && t2 <= r2) {
@@ -45,10 +45,10 @@ function getIntersection() {
             }
         } else {
             // 线段
-            if (t1 >= r1 && t1<=r2 && t2 <= r2) {
+            if (t1 >= r1 && t1 <= r2 && t2 <= r2) {
                 result = [t1, t2];
-                
-            } else if (t1 >= r1 && t1<=r2 && t2 > r2) {
+
+            } else if (t1 >= r1 && t1 <= r2 && t2 > r2) {
                 result = [t1, r2];
             } else {
                 return null;
@@ -63,10 +63,10 @@ function getIntersection() {
 
 console.log(getIntersection([5, 2], [4, 9], [3, 6]))
 console.log(getIntersection([1, 7], [8, 9]));
-console.log(getIntersection([5,2]));
+console.log(getIntersection([5, 2]));
 console.log(getIntersection());
 console.log(getIntersection([1, 7], [8, 9]));
-console.log(getIntersection([7, 1], [5, 9],[6,6]));
+console.log(getIntersection([7, 1], [5, 9], [6, 6]));
 
 
 
@@ -86,8 +86,26 @@ console.log(getIntersection([7, 1], [5, 9],[6,6]));
  *  const str2 = 'personFirstName';
  *  parseStrToHungarianNotation(str2); // 返回 'person_first_name'
  */
+function parseStrToCamelCase(str) {
+    const strList = str.split('_');
+    let result = strList[0];
+    for (let i = 1, len = strList.length; i < len; i++) {
+        const name = strList[i];
+        result += name.slice(0, 1).toUpperCase() + name.slice(1);
+    }
+    return result;
+}
+
+
+console.log(parseStrToCamelCase('person_first_name'));
+
+console.log(parseStrToCamelCase('_person'));
+
+
+
 /**
  * 题目三：
  * 对页面上所有 a 标签， 在其被点击时，判断其 href 是否是以 https 开头，
  * 如果是，则不做任何处理；如果不是，则 console.warn 输出 非 https 链接。
  */
+
