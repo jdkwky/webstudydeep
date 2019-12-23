@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>查找</title>
+</head>
+
+<body>
+    <!-- 二分查找 -->
+    <!-- 第 150 题：二分查找如何定位左边界和右边界 不使用JS数组API，查找有序数列最先出现的位置和最后出现的位置 -->
+    <script>
+        function search(arr, target) {
+            let begin = 0;
+            let end = arr.length - 1;
+            const result = [];
+            while (begin <= end) {
+                const mid = (begin + end) >>> 1;
+                if (target === arr[mid]) {
+                    let left = mid;
+                    let right = mid;
+                    result.push(mid)
+                    while (--left && left >= begin) {
+                        if (arr[mid] === arr[left]) {
+                            result.unshift(left)
+                        }
+                    }
+                    while (++right && right <= end) {
+                        if (arr[mid] === arr[right]) {
+                            result.push(right)
+                        }
+                    }
+                    break;
+                } else if (target > arr[mid]) {
+                    begin = mid + 1;
+                } else {
+                    end = mid - 1;
+                }
+            }
+            return result
+        }
+
+        const list1 = [1, 4, 4, 4, 5, 6, 7];
+        console.log(search(list1, 4));
+
+
+        // 用最简单代码实现indexof
+        function formatIndexof(str, target, index) {
+            let begin = index || 0;
+            let end = str.length || 0;
+            const tLen = target.length
+            if (begin > end) {
+                return -1;
+            }
+            if (tLen == 1 || Object.prototype.toString.call(str) === '[object Array]') {
+                for (let i = begin; i < end; i++) {
+                    console.log(str[i], target);
+
+                    if (str[i] === target) {
+                        return i
+                    }
+                }
+
+            } else if (tLen > 1) {
+                for (let i = begin; i < end; i++) {
+
+                    const temp = str.slice(i, tLen + i);
+
+                    if (target === temp) {
+                        return i
+                    }
+                }
+
+            }
+            return -1;
+
+        }
+
+        console.log(formatIndexof('abfcs', 'bfc', 0));
+        console.log(formatIndexof(['sss', 'adfs'], 'adfs', 0));
+
+
+    </script>
+</body>
+
+</html>

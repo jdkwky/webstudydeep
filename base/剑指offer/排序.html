@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>排序</title>
+</head>
+
+<body>
+    <!-- 快排  -->
+
+    <script>
+        function quickRank(list = [], left, right) {
+            if (left > right) {
+                return;
+            }
+            let i, j, t, temp;
+            i = left;
+            j = right;
+            temp = list[left];
+
+
+            while (i != j) {
+
+                while (list[j] >= temp && i < j) {
+                    j--;
+                }
+                while (list[i] <= temp && i < j) {
+                    i++;
+                }
+                if (i < j) {
+
+                    const t = list[j];
+                    list[j] = list[i];
+                    list[i] = t;
+                }
+            }
+
+            list[left] = list[i];
+            list[i] = temp;
+
+            if (i == j) {
+                quickRank(list, left, i - 1);
+                quickRank(list, i + 1, right);
+            }
+            return;
+        }
+
+
+        const list = [6, 1, 2, 7, 9, 3, 4, 5, 10, 8]
+        quickRank(list, 0, list.length - 1);
+        console.log(list, 'list');
+        const list2 = [1, 2, 3, 45, 6];
+        quickRank(list2, 0, list2.length - 1);
+        console.log(list2, 'list2');
+
+    </script>
+</body>
+
+</html>
