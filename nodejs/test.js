@@ -1,3 +1,3 @@
-const {hello,helloName} = require('./hello');
+const { hello, helloName } = require('./hello');
 hello();
 helloName();

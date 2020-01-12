@@ -27,6 +27,11 @@
                 while (list[j] >= temp && i < j) {
                     j--;
                 }
+                if (i < j) {
+                    const t = list[j];
+                    list[j] = list[i];
+                    list[i] = t;
+                }
                 while (list[i] <= temp && i < j) {
                     i++;
                 }
@@ -36,11 +41,8 @@
                     list[j] = list[i];
                     list[i] = t;
                 }
+
             }
-
-            list[left] = list[i];
-            list[i] = temp;
-
             if (i == j) {
                 quickRank(list, left, i - 1);
                 quickRank(list, i + 1, right);
