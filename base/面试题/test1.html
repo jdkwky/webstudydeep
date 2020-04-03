@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- let a = Foo() //a.id -> 1
+let b = new Foo() //b.id -> 2
+let c = new Foo() //c.id -> 3
+let d = Foo() //d.id -> 4 -->
+
+
+<script>
+    var Foo = (function(){
+        var id = 0;
+        return function Temp (){
+            return {
+                id: id++
+            }
+        }
+    })();
+
+let a = Foo() //a.id -> 1
+console.log(a.id);
+
+let b = new Foo() //b.id -> 2
+console.log(b.id);
+
+let c = new Foo() //c.id -> 3
+console.log(c.id);
+
+let d = Foo() //d.id -> 4 
+console.log(d.id);
+
+</script>
+</body>
+</html>

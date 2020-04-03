@@ -1,0 +1,47 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script>
+    </script>
+</head>
+
+<body>
+    <input type="text" name="url" value="" size="600" />
+    <input type="button" name="播放" value="播放" onclick="play()" />
+    <input type="button" name="停止" value="停止" onclick="stop()" />
+    <div>
+        <!-- <embed id="vlc" type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" /> -->
+        <!-- <object id="vlc" classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921" codebase="http://download.videolan.org/pub/videolan/vlc/last/win32/axvlc.cab">
+<param name="autostart" value="true" />
+<param name="allowfullscreen" value="false" />
+<embed id="vlc" type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" />
+</object> -->
+        <object classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921"
+            codebase="http://download.videolan.org/pub/videolan/vlc/last/win32/axvlc.cab" id="vlc">
+            <embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" name="vlc" />
+        </object>
+    </div>
+</body>
+<script type="text/javascript">
+    function play() {
+        var vlc = document.getElementById("vlc");
+        console.log('===============================');
+        console.log('vlc', vlc, vlc.playlist);
+        console.log('===============================');
+        var rtspUrl = document.getElementById("url").value;
+        var options = new Array(":aspect-ratio=4:3", "--rtsp-tcp");
+        var id = vlc.playlist.add(rtspUrl, "fancy name", options);
+        vlc.playlist.playItem(id);
+        vlc.playlist.play();
+    }
+    function stop() {
+        var vlc = document.getElementById("vlc");
+        vlc.playlist.stop();
+    }
+</script>
+
+</html>

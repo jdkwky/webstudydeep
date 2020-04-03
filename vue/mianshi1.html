@@ -1,0 +1,30 @@
+<html>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+<body>
+    <div id="app">
+        <div>{{ list }}</div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                list: [],
+            },
+            mounted() {
+                setTimeout(() => {
+                    this.list[0] = 3
+                }, 1000)
+                setTimeout(() => {
+                    this.list.length = 5
+                }, 2000)
+                setTimeout(() => {
+                    this.$set(this.list, this.list)
+                }, 3000)
+            }
+        })
+    </script>
+</body>
+
+</html>

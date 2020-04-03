@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>响应式原理</title>
+</head>
+
+<body>
+    <script>
+
+        function observeReactive(obj, key, val) {
+            const dep = new Dep();
+            Object.defineProperty(obj, key, {
+                enumerable: true,
+                configurable: true,
+                set(newVal) {
+                    if (newVal == val) {
+                        return;
+                    }
+                    val = newVal;
+                    dep.nodify();
+                },
+                get() {
+                    dep.addSubs(Dep.target);
+                    return val
+                }
+            })
+        }
+
+        function observe(obj) {
+            Object.keys(obj).forEach(val => {
+                observeReactive(obj, val, obj[val])
+            })
+        }
+
+        function Watcher() {
+
+        }
+        Watcher.prototype = {
+            construtor: Watcher,
+            update() {
+                console.log('试图更新了~~~');
+                console.log('===========');
+
+            }
+        }
+
+
+        function Dep() {
+            this.subs = [];
+        }
+
+        Dep.prototype = {
+            construtor: Dep,
+            addSubs(watcher) {
+                this.subs.push(watcher);
+                console.log(this.subs, 'this.subs');
+
+
+            },
+            nodify() {
+                const subs = this.subs || [];
+                subs.forEach(val => {
+                    val.update();
+                })
+            }
+        }
+
+        Dep.target = null;
+
+        function Vue(options) {
+            this._data = options.data;
+            observe(this._data);
+            Dep.target = new Watcher();
+            Dep.target.update();
+
+        }
+
+        let o = new Vue({
+            data: {
+                test: 'test',
+                name: ''
+            }
+        })
+        console.log(o._data.name, o._data.name);
+        // o._data.test = 'i m test';
+        // o._data.test = 'you is test';
+        o._data.name = 'name';
+
+        console.log(o._data.name);
+
+
+
+
+    </script>
+</body>
+
+</html>
