@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>前端路由</title>
+</head>
+
+<body>
+    <button onclick="Router.pre()">go(-1)上一页</button>
+    <ul>
+        <li><a href="/">turn yellow</a></li>
+        <li><a href="/blue">turn blue</a></li>
+        <li><a href="/green">turn green</a></li>
+    </ul>
+    <!-- hash -->
+    <!-- <script>
+        class Routers {
+            constructor() {
+                // 已键值对的形势存储路由
+                this.routes = {};
+                // 当前路由的URL;
+                this.currentUrl = "";
+
+                this.refresh = this.refresh.bind(this);
+
+                window.addEventListener('load', this.refresh, false);
+                window.addEventListener('hashchange', this.refresh, false)
+            }
+
+            route(path, callback) {
+                this.routes[path] = callback || function () { };
+            }
+
+            refresh() {
+                this.currentUrl = location.hash.slice(1) || '/';
+                this.routes[this.currentUrl] && this.routes[this.currentUrl]();
+            }
+        }
+
+
+        window.Router = new Routers();
+        var content = document.querySelector('body');
+        // change Page anything
+        function changeBgColor(color) {
+            content.style.backgroundColor = color;
+        }
+        Router.route('/', function () {
+            changeBgColor('yellow');
+        });
+        Router.route('/blue', function () {
+            changeBgColor('blue');
+        });
+        Router.route('/green', function () {
+            changeBgColor('green');
+        });
+    </script> -->
+
+    <!-- h5 history -->
+
+    <script>
+        class Routers {
+            constructor() {
+                this.routes = {};
+                this._bindPopState();
+            }
+            init(path) {
+                history.replaceState({ path: path, name: "init" }, null, 'init');
+                this.routes[path] && this.routes[path]();
+            }
+
+            route(path, callback) {
+                this.routes[path] = callback || function () { };
+            }
+
+            go(path) {
+                history.pushState({ path: path, name: "go" }, null, 'go');
+                this.routes[path] && this.routes[path]();
+            }
+            pre() {
+                history.back();
+            }
+            _bindPopState() {
+                window.addEventListener('popstate', e => {
+                    console.log(e.state, 'state');
+
+                    const path = e.state && e.state.path;
+                    this.routes[path] && this.routes[path]();
+                });
+            }
+        }
+
+        window.Router = new Routers();
+        Router.init(location.pathname);
+        const content = document.querySelector('body');
+        const ul = document.querySelector('ul');
+        function changeBgColor(color) {
+            content.style.backgroundColor = color;
+        }
+
+        Router.route('/', function () {
+            changeBgColor('yellow');
+        });
+        Router.route('/blue', function () {
+            changeBgColor('blue');
+        });
+        Router.route('/green', function () {
+            changeBgColor('green');
+        });
+
+        ul.addEventListener('click', e => {
+            if (e.target.tagName === 'A') {
+                e.preventDefault();
+                Router.go(e.target.getAttribute('href'));
+            }
+        });
+
+    </script>
+</body>
+
+</html>

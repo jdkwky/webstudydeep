@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- add(1)(2,3)(4).value() -->
+
+    <script>
+        // add(1)(2,3)(4).value()   10
+        
+
+        // function add(...args){
+        //     var list = [...args];
+        //     const getArgs = ( ...nums)=>{
+        //         list = [...list, ...nums];
+        //         return getArgs;
+        //     }
+        //     getArgs.value = ()=>{
+        //         return list.reduce((val1,val2) => val1+val2, 0)
+        //     }
+        //     return getArgs;
+        // }
+
+
+
+
+        // const result = add(1)(2,3)(5).value()
+        // console.log(result)
+
+        // 2.实现一个异步队列Queue，要求按时间依次执行callback
+        // new Queue().task(1000, function () {
+        //     console.log(1);}).task(2000, 
+        //     function () { 
+        //         console.log(2);}).start()
+
+        class Queue {
+            constructor(){
+                this.callbacks = [];
+                return this;
+            }
+
+            task(delayMs, callback){
+                this.callbacks.push(()=>{
+                    return new Promise(resolve =>{
+                        setTimeout(()=>{
+                            callback && callback();
+                            resolve();
+                        },delayMs);
+                    })
+                })
+                return this;
+            }
+
+            start(){
+                let next = Promise.resolve();
+                for(let i = 0 , len = this.callbacks.length; i < len;  i++){
+                    const callback = this.callbacks[i];
+                    next = next.then(()=>{
+                        return callback && callback();
+                    })
+                }
+                return this;
+            }
+        }
+
+        new Queue().task(1000, function () {
+            console.log(1);}).task(1000, 
+            function () { 
+                console.log(2);}).start()
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas 绘制1</title>
+    <style>
+        canvas {
+            background: #e5e5e5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="canvas" width="600" height="300">
+        不支持canvas元素
+    </canvas>
+
+
+    <script>
+
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        context.lineWidth = '5px'
+        context.font = '40px Arial';
+        context.fillStyle = 'blue';
+        context.strokeStyle = "red";
+        const textWidth = canvas.width / 2 - 150;
+        const textHeight = canvas.height / 2 - 15;
+        context.fillText('hello canvas ', textWidth, textHeight);
+        context.strokeText('hello canvas ', textWidth, textHeight);
+
+
+        context.save();
+        context.fillStyle = "green";
+        context.fillRect(10, 10, 150, 200);
+
+        context.restore();
+
+        context.fillRect(30, 30, 150, 200);
+
+    </script>
+
+</body>
+
+</html>

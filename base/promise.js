@@ -1,88 +1,93 @@
 // 全局变量  
-const PENDING = 0 ;
-const FULFILLED = 1 ; 
-const REJECTED = 2 ;
+const PENDING = 0;
+const FULFILLED = 1;
+const REJECTED = 2;
 
-function Promise (fn) {
+function Promise(fn) {
     let state = PENDING;
     let value = null;
     let handlers = [];
 
-    function fulfill( reslut ){
-        state = FULFILLED ; 
+    function fulfill(reslut) {
+        state = FULFILLED;
         value = reslut
         handlers.forEach(handle);
         handlers = [];
     }
 
-    function reject (error) {
+    function reject(error) {
         state = REJECTED;
         value = error;
         handlers.forEach(handle);
         handlers = [];
     }
 
-    function handle (handler){
-        if( state === PENDING ){
+    function handle(handler) {
+        if (state === PENDING) {
             handlers.push(handler);
-        }else if ( state === FULFILLED && typeof handler.onFulfilled === 'function' ){
+        } else if (state === FULFILLED && typeof handler.onFulfilled === 'function') {
             handler.onFulfilled(value);
-        }else if ( state === REJECTED && typeof handler.onRejected === 'function' ){
+        } else if (state === REJECTED && typeof handler.onRejected === 'function') {
             handler.onRejected(value);
         }
     }
 
     function getThen(reslut) {
-        if( typeof reslut ==='object' || typeof reslut === 'function' ){
-            if( reslut.then && typeof reslut.then === 'function' ){
+        if (typeof reslut === 'object' || typeof reslut === 'function') {
+            if (reslut.then && typeof reslut.then === 'function') {
                 return reslut.then;
             }
         }
         return null;
     }
 
-    function doResolve (fn , resolve, reject){
-        fn(function(reslut){
+    function doResolve(fn, resolve, reject) {
+        console.log(fn, 'fn')
+        fn(function (reslut) {
+            console.log(reslut, 'result');
+
             resolve(reslut);
-        }, function(reslut){
+        }, function (reslut) {
             reject(reject);;
         });
     }
 
-    function resolve ( newResult ) {
+    function resolve(newResult) {
+        console.log(newResult, 'newResult');
+
         // 判断newResult是否具有thenabel对象
         const then = getThen(newResult);
-        if(then){
-            doResolve(then.bind(newResult), resolve, reject); 
-            return ;
+        if (then) {
+            doResolve(then.bind(newResult), resolve, reject);
+            return;
         }
         fulfill(newResult);
     }
 
-    doResolve(fn, resolve,reject);
+    doResolve(fn, resolve, reject);
 
-    this.done = function (onFulfilled, onRejected){
+    this.done = function (onFulfilled, onRejected) {
         setTimeout(() => {
             handle({
                 onFulfilled: onFulfilled,
-                onRejected : onRejected
+                onRejected: onRejected
             });
         }, 0);
     }
 
-    this.then = function ( onFulfilled, onRejected ){
+    this.then = function (onFulfilled, onRejected) {
         const _this = this;
-        return new Promise( function (resolve, reject ){
-            return _this.done(function(reslut){
-                if( onFulfilled && typeof onFulfilled === 'function' ){
+        return new Promise(function (resolve, reject) {
+            return _this.done(function (reslut) {
+                if (onFulfilled && typeof onFulfilled === 'function') {
                     return resolve(onFulfilled(reslut));
-                }else {
+                } else {
                     return resolve(reslut);
                 }
-            },function(reslut){
-                if(onRejected && typeof onRejected === 'function'){
+            }, function (reslut) {
+                if (onRejected && typeof onRejected === 'function') {
                     return reject(onRejected(reslut));
-                }else{
+                } else {
                     return reject(reslut);
                 }
             })

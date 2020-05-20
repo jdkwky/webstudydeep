@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>回文串</title>
+</head>
+
+<body>
+    <script>
+        adcdxdcxdcda
+        adcdxcdxdcda
+        function test(s) {
+            var res = s.split('').reverse().join('');
+            var len = s.length;
+            var result = ''
+            for (let i = 0; i < len; i++) {
+                var sum = '';
+                for (let j = 0; j < len; j++) {
+                    if (res[j] == s[i]) {
+                        sum += res[j]
+                    } else {
+                        sum = '';
+                    }
+                }
+                if (sum.length > result.length) {
+                    result = sum;
+                }
+            }
+            return sum.length
+        }
+
+    </script>
+</body>
+
+</html>

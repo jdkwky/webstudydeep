@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模拟一些原生方法</title>
+</head>
+
+<body>
+    <!--  new  -->
+
+    <!-- <script>
+        // var obj = {};
+        // obj.__proto__ = Base.prototype;
+        // Base.call(obj);
+
+        //  创建一个对象
+        //  增加 _proto_
+        //  改变this指向
+
+
+
+        function _new(fn, ...args) {
+
+            if (Object.prototype.toString.call(fn) === '[object Function]') {
+                const obj = {};
+                obj.__proto__ = fn.prototype;
+                const result = fn.apply(obj, args);
+                if (result) {
+                    return result;
+                }
+                return obj;
+            }
+            throw ('fn is need to be function')
+        }
+
+        function Parent(name) {
+            this.name = name
+        }
+        Parent.prototype.sayName = function () {
+            console.log(this.name, 'sayName');
+        }
+
+        const p = _new(Parent, 'wky');
+        console.log(p);
+        p.sayName();
+
+    </script> -->
+
+
+    <!-- 实现一个JSON.stringify -->
+    <!-- <script>
+
+        function changeText(params) {
+            const regxIgnore = /undefined|symbol|function/;
+            const regxString = /string|boolean|number/;
+            if (regxIgnore.test(typeof params)) {
+                return '';
+            } else if (
+                regxString.test(typeof params) ||
+                params instanceof String ||
+                params instanceof Number ||
+                params instanceof Boolean ||
+                params instanceof Date
+            ) {
+                return '"' + String(params) + '"';
+            }
+            return '"' + String(params) + '"';
+        }
+        function jsonStringify(params, index = 0) {
+
+            const regxIgnore = /undefined|symbol|function/;
+            const regxString = /string|boolean|number/;
+            if (regxIgnore.test(typeof params)) {
+                return '';
+            } else if (
+                regxString.test(typeof params) ||
+                params instanceof String ||
+                params instanceof Number ||
+                params instanceof Boolean ||
+                params instanceof Date
+            ) {
+                return '"' + String(params) + '"';
+            } else {
+                // 对象或者数组
+                // 判断是对象或者是数组
+                const isArray = Object.prototype.toString.call(params) === '[object Array]';
+                let result = '';
+                if (isArray) {
+                    // 数组
+                    if (index == 0) {
+                        result = '"';
+                    }
+                    result += '[';
+                    for (let val of params) {
+                        if (typeof val == 'object' && val) {
+                            const i = index + 1;
+                            const v = jsonStringify(val, i);
+                            result += v + ',';
+                        } else if (val) {
+                            const temp = changeText(val);
+                            if (temp) {
+                                result += temp + ',';
+                            }
+                        }
+                    }
+                    result = result.substring(0, result.length - 1);
+                    result += ']';
+                    if (index == 0) {
+                        result += '"';
+                    }
+                } else {
+                    // 对象
+                    if (index == 0) {
+                        result = '"';
+                    }
+                    result += '{';
+                    for (let val in params) {
+                        if (typeof params[val] == 'object' && params[val]) {
+                            const ai = index + 1;
+                            const v = jsonStringify(params[val], ai);
+                            result += '"' + val + '"' + ':' + v + ',';
+                        } else if (params[val]) {
+                            const temp = changeText(params[val]);
+                            if (temp) {
+                                result += '"' + val + '"' + ':' + temp + ',';
+                            }
+                        } else {
+                            result += ',';
+                        }
+                    }
+                    result = result.substring(0, result.length - 1);
+                    result += '}';
+                    if (index == 0) {
+                        result += '"';
+                    }
+                }
+                return result;
+            }
+        }
+
+
+        const a = {
+            a: new Date()
+            , name: 'jsonStringify'
+        };
+
+        const b = [1, a, 2]
+        const result = jsonStringify(b);
+        console.log(result, 'result');
+
+
+    </script> -->
+
+    <!-- 实现call apply bind -->
+
+    <!-- <script>
+
+        Function.prototype._call = function (params) {
+            const context = arguments[0];
+            if (context) {
+                const args = [...arguments].slice(1);
+                context.fn = this;
+                const res = context.fn(args);
+                delete context.fn;
+                return res;
+            } else {
+                return this([...arguments].slice(1));
+            }
+        };
+
+        var name = 'wky'
+        const obj = {
+            name: 'yc'
+        }
+
+        function showName() {
+            console.log(this.name);
+        }
+
+        showName._call();
+        showName._call(obj);
+    </script> -->
+
+
+    <!-- 实现 bind -->
+
+    <!-- <script>
+        // bind 返回一个函数
+
+        Function.prototype._bind = function () {
+            var slice = Array.prototype.slice;
+            var thatFunc = this, thatArg = arguments[0];
+            var args = slice.call(arguments, 1);
+            if (typeof thatFunc !== 'function') {
+                // closest thing possible to the ECMAScript 5
+                // internal IsCallable function
+                throw new TypeError('Function.prototype.bind - ' +
+                    'what is trying to be bound is not callable');
+            }
+            return function () {
+                var funcArgs = args.concat(slice.call(arguments))
+                return thatFunc.apply(thatArg, funcArgs);
+            };
+        };
+
+
+        const obj = {
+            name: 'wky'
+        }
+
+        var name = 'yc'
+
+        function sayName() {
+            console.log(this.name);
+        }
+
+        const result = sayName._bind();
+        result();
+    </script> -->
+
+    <!-- 实现一个继承 -->
+
+    <!-- <script>
+        function Parent() {
+            this.colors = [];
+            this.name = 'parent'
+        }
+
+        Parent.prototype.addColors = function (color) {
+            this.colors.push(color)
+        }
+        Parent.prototype.list = [];
+
+        function Sub() {
+            Parent.call(this);
+            this.name = 'sub';
+            this.list.push('sublist');
+        }
+
+        Sub.prototype = Object.create(Parent.prototype);
+
+        const sub = new Sub();
+        const parent = new Parent();
+        const sub1 = new Sub();
+        sub.addColors('red');
+
+        console.log(sub.name, sub.colors, sub.list);
+        console.log(parent.colors, parent.list);
+        console.log(sub1.list);
+
+
+    </script> -->
+
+    <!-- 实现一个函数的柯里化 -->
+    <!-- 
+    <script>
+        function curry(fn) {
+            const length = fn.length;
+            let args = [...arguments].slice(1);
+            return function curryFn() {
+                args = args.concat([...arguments]);
+                if (args.length === length) {
+                    return fn.apply(null, args);
+                } else {
+                    return curryFn;
+                }
+            }
+        }
+
+        function sum(a, b, c) {
+            return a + b + c;
+        }
+
+        const c = curry(sum, 1, 2);
+        const result = c(3);
+
+
+    </script> -->
+
+    <!-- 手写一个promise -->
+
+    <!-- <script>
+        // then 返回一个promise对象
+        // resolve 才会继续执行
+        // reject 抛出异常
+        // 状态只有一次
+
+
+        // var p = new Promise((resolve, reject) => {
+        //     resolve();
+        // });
+        // p.then(() => {
+        //     return ''
+        // });
+        // p.catch(() => {
+        //     return ''
+        // })
+
+
+        function _Promise(fn) {
+            this.fulfilled = 1;
+            this.rejected = 2;
+            this.pending = 0;
+            this.status = this.pending;
+            this.value = null;
+            this.error = null;
+            this.handlers = [];
+            return this.doResolve(fn);
+        }
+        // 执行构造函数
+        _Promise.prototype.doResolve = function (fn) {
+
+            fn && fn.call(this, this.resolve.bind(this), this.reject.bind(this));
+        }
+
+        _Promise.prototype.done = function (onFulfilled, onRejected) {
+            setTimeout(() => {
+                return this.handle({
+                    onFulfilled: onFulfilled,
+                    onRejected: onRejected
+                })
+            }, 0)
+        }
+        //  fulfill
+        _Promise.prototype.fulfill = function (value) {
+            this.status = this.fulfilled;
+            this.value = value;
+            this.handlers.forEach(this.handle.bind(this));
+
+            this.handlers = []
+        };
+
+        // resolve
+        _Promise.prototype.resolve = function (value) {
+
+            if (value instanceof _Promise && value.then) {
+                return this.doResolve(value.then.bind(value), this.resolve, this.reject);
+            }
+            this.fulfill(value)
+        }
+        // reject
+        _Promise.prototype.reject = function (error) {
+            this.status = this.rejected;
+            this.error = error;
+
+            this.handlers.forEach(this.handle);
+            this.handlers = []
+        }
+
+        _Promise.prototype.handle = function (obj) {
+
+
+            if (this.status == this.pending) {
+                this.handlers.push(obj);
+
+            } else if (this.status == this.rejected) {
+                return obj && obj.onRejected.call(this, this.error);
+            } else if (this.status == this.fulfilled) {
+                return obj && obj.onFulfilled.call(this, this.value);
+            }
+
+        }
+        // then
+        _Promise.prototype.then = function (onFulfilled, onRejected) {
+            const _this = this;
+            return new _Promise(function (resolve, reject) {
+                return _this.done((result) => {
+                    if (onFulfilled) {
+                        return resolve(onFulfilled && onFulfilled.call(_this, result));
+                    } else {
+                        return resolve(result)
+                    }
+                }, (error) => {
+                    if (onRejected) {
+                        return reject(onRejected && onRejected.call(_this, error));
+                    } else {
+                        return reject(error)
+                    }
+                })
+            })
+        }
+
+
+
+
+
+        var p = new _Promise((resolve) => {
+            setTimeout(() => {
+                resolve(1)
+            }, 2000)
+        })
+        const p1 = p.then((result) => {
+            return new _Promise(resolve => {
+                setTimeout(() => {
+                    console.log('test', result);
+                    resolve(2);
+                }, 2000)
+            })
+        }).then((result) => {
+            return new _Promise(resolve => {
+                setTimeout(() => {
+                    console.log('test 2000', result);
+                    resolve(3);
+                }, 2000)
+            })
+        }).then(result => {
+            console.log('test,', result)
+        })
+        console.log(p1, 'p1')
+
+
+    </script> -->
+
+    <!-- <script>
+        var waysToChange = function (n) {
+            //  25 10 5 1
+            var sum = 1;
+            var a = n / 5;
+
+
+            var d = 0;
+            var e = 0;
+            var f = 0;
+
+            //  5d + 2e + f = a ;
+
+            while (d <= a / 5) {
+                e = 0;
+                f = 0;
+                if (5 * d + 2 * e + f == a) {
+                    sum = sum + 1;
+                }
+                while (e <= a / 2) {
+                    f = 0;
+                    if (5 * d + 2 * e + f == a) {
+                        sum = sum + 1;
+                    }
+                    while (f <= a) {
+                        if (5 * d + 2 * e + f == a) {
+                            sum = sum + f;
+                        }
+                        f++;
+                    }
+
+                    e++;
+                }
+                d++;
+            }
+
+            return sum;
+
+
+        };
+
+        var result = waysToChange(51);
+        console.log(result);
+
+    </script> -->
+
+    <!-- 防抖 -->
+
+    <!-- <div onmousemove="handleMove(event)">hello hello</div> -->
+    <!-- <script>
+
+        function debouncing(fn, delayMs) {
+            let time = null;
+            return function (...args) {
+                if (time) {
+                    clearTimeout(time);
+                }
+                time = setTimeout(() => {
+                    fn && fn.apply(null, args)
+                }, delayMs)
+            }
+        }
+
+        var test = debouncing(() => {
+            console.log('move')
+        }, 1000)
+
+        function handleMove(event) {
+            test();
+        }
+    </script> -->
+
+
+    <!-- 节流 -->
+
+    <!-- <script>
+        function throttling(fn, ms) {
+            let flag = false;
+            let preTime = +new Date();
+
+            return function (...args) {
+                const now = +new Date();
+
+                if (now - preTime > ms) {
+                    flag = false;
+                    preTime = now;
+                } else {
+                    if (!flag) {
+                        flag = true;
+                        fn && fn.apply(null, args);
+                    }
+                }
+            }
+        }
+
+        var test = throttling(() => {
+            console.log('test, throtting');
+        }, 1000)
+        function handleMove(event) {
+            test();
+        }
+    </script> -->
+
+    <!-- 手写一个JS深拷贝 -->
+    <!-- <script>
+        function deepCopy(obj) {
+            if (typeof obj == "object") {
+                var result = Object.prototype.toString.call(obj) === '[object Array]' ? [] : {};
+                for (let i in obj) {
+                    result[i] = typeof obj[i] == "object" ? deepCopy(obj[i]) : obj[i];
+                }
+            } else {
+                var result = obj;
+            }
+            return result;
+        }
+
+        var a = [1, 3, [1, 3], { name: '123' }];
+        b = deepCopy(a);
+        console.log(b, b == a);
+
+    </script> -->
+
+    <!-- instanceof  -->
+
+    <!-- <script>
+        function _instanceof(l, r) {
+            var o = r.prototype;
+            l = l.__proto__;
+            while (true) {
+                if (l === null) {
+                    return false;
+                }
+                if (o === l) {
+                    return true;
+                }
+                l = l.__proto__;
+            }
+        }
+    </script> -->
+
+    <!-- 实现一个co模块 -->
+
+    <!-- <script>
+        function co(gen) {
+            var g = gen();
+            var t = g.next();
+            function next(res) {
+                if (res.done) return;
+                if (typeof g.next != 'function') return;
+                if (res.value instanceof Promise) {
+                    res.value.then(value => {
+                        res = g.next(value);
+                        next(res);
+                    })
+                } else {
+                    // 普通的函数 
+                    res = g.next(res.value);
+                    next(res);
+                }
+            }
+            next(t)
+        };
+
+
+
+        function* testGenerator() {
+            const y = yield 1;
+            const x = yield new Promise((resovle) => {
+                setTimeout(() => {
+                    resovle(4)
+                }, 1000)
+            });
+
+            yield 3 + x + y;
+        }
+
+        co(testGenerator);
+    </script> -->
+
+
+    <!-- <script>
+        // function co(genenratorFn) {
+        //     var gen = genenratorFn();
+        //     var it = gen.next();
+
+        //     return new Promise((resolve, reject) => {
+        //         const next = function () {
+        //             if (it.done) {
+        //                 resolve(it.value);
+        //             } else {
+        //                 it.value = Promise.resolve(it.value);
+        //                 it.value.then((result) => {
+        //                     console.log(it, 'ite');
+
+        //                     it = gen.next(result);
+        //                     next(it)
+        //                 });
+        //                 it.value.catch((err) => {
+        //                     reject(err)
+        //                 })
+        //             }
+        //         }
+        //         next(it)
+        //     })
+        // }
+
+
+        // function* test() {
+        //     var x = yield new Promise((resolve) => {
+        //         setTimeout(() => {
+        //             resolve(3)
+        //         }, 2000)
+        //     });
+
+        //     var y = yield new Promise((resolve) => {
+        //         setTimeout(() => {
+        //             resolve(4)
+        //         }, 2000)
+        //     });
+
+        //     return x + y
+        // }
+
+        // const result = co(test);
+        // result.then(res => {
+        //     console.log(res, 'res')
+        // })
+
+
+        // function* test() {
+        //     var x = 5 + (yield setTimeout(() => {
+        //         console.log('3')
+        //     }, 2000))
+
+        //     var y = yield setTimeout(() => {
+        //         console.log('4')
+        //     }, 2000)
+
+
+        // }
+
+        // const t = test();
+        // console.log(t.next())
+        // console.log(t.next())
+        // console.log(t.next())
+
+
+    </script> -->
+
+
+    <!-- async and await -->
+
+    <!-- <script>
+
+        async function async1() {
+            console.log('async1 start');
+            await async2(1000);
+            await async2(2000);
+            console.log('async1 end');
+        }
+        async function async2(ms) {
+            console.log('im 2');
+
+            return new Promise((resovle) => {
+                setTimeout(() => {
+                    resovle();
+                    console.log('async2');
+                }, ms)
+            })
+        }
+        console.log('script start');
+        setTimeout(function () {
+            console.log('setTimeout');
+        }, 0)
+        async1();
+        new Promise(function (resolve) {
+            console.log('promise1');
+            resolve();
+        }).then(function () {
+            console.log('promise2');
+        });
+        console.log('script end');
+
+
+
+        // 'script start'    
+        // 'async1 start' 
+        // 'async2'   
+        // 'promise1' 
+        // 'script end'  
+        //  'async1 end'   
+        // 'promise2'  
+        //  'setTimeout'
+
+
+//         script start
+// index.html:672 async1 start
+// index.html:677 async2
+// index.html:685 promise1
+// index.html:690 script end
+// index.html:674 async1 end
+// index.html:688 promise2
+// index.html:681 setTimeout
+
+    </script> -->
+
+
+    <!-- 已知如下数组：
+
+var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];
+
+编写一个程序将数组扁平化去并除其中重复部分数据，最终得到一个升序且不重复的数组 -->
+
+
+
+    <!-- <script>
+        function flatArray(list) {
+            let result = []
+            for (let i = 0, len = list.length; i < len; i++) {
+                const temp = list[i];
+                if (Object.prototype.toString.call(temp) === '[object Array]') {
+                    const re = flatArray(temp);
+                    result = [...result, ...re]
+                } else {
+                    result.push(temp)
+                }
+            }
+            return result;
+        }
+
+        function getChange(list) {
+            // const newList = [...new Set(Array.from(flatArray(list)))];
+            // return newList.sort((val1, val2) => val1 - val2);
+
+            return Array.from(new Set(JSON.stringify(list).replace(/(\[|\])/g, '').split(",").sort((a, b) => { return a - b }).map(Number)))
+        }
+
+        const result = getChange([[1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14]]]], 10]);
+
+        console.log(result, 'result');
+
+    </script> -->
+
+
+
+    <!-- for (var i = 0; i< 10; i++){
+	setTimeout(() => {
+		console.log(i);
+    }, 1000)
+} -->
+
+
+    <!-- 
+    <script>
+        for (let i = 0; i < 10; i++) {
+            setTimeout(() => {
+                console.log(i);
+            }, 1000)
+        }
+
+        for (var i = 0; i < 10; i++) {
+            setTimeout((
+                (i) => {
+                    return () => {
+                        console.log(i);
+                    }
+                }
+            )(i), 1000)
+        }
+
+
+        for (var i = 0; i < 10; i++) {
+
+            setTimeout((i) => {
+                console.log(i);
+            }, 1000, i)
+        }
+
+
+    </script> -->
+
+    <!-- <script>
+        // var b = 10;
+        // (function b() {
+
+        //     b = 10;
+        //     console.log(b, 'b');
+        // })();
+
+        // function c() {
+        //     'use strict'
+        //     c = 20;
+        //     console.log(c);
+        // }
+        // c();
+
+        // var a = 10;
+        // (function () {
+        //     console.log(a)
+        //     a = 5
+        //     console.log(window.a)
+        //     var a = 20;
+        //     console.log(a)
+        // })()
+
+
+        // var obj = {
+        //     '2': 3,
+        //     '3': 4,
+        //     'length': 2,
+        //     'splice': Array.prototype.splice,
+        //     'push': Array.prototype.push
+        // }
+        // obj.push(1)
+        // obj.push(2)
+        // console.log(obj)
+
+    </script> -->
+
+    <!-- 实现 (5).add(3).minus(2) 功能。 -->
+
+    <!-- <script>
+        Number.prototype.add = function (val) {
+            return this.valueOf() + val;
+        }
+
+        Number.prototype.minus = function (val) {
+            return this.valueOf() - val;
+        }
+
+        console.log(Number.prototype, 'Number.prototype')
+
+        console.log((5).add(3).minus(2), '(5).add(3).minus(2)')
+    </script> -->
+
+
+    <!-- 请实现一个 add 函数，满足以下功能。
+add(1); 			// 1
+add(1)(2);  	// 3
+add(1)(2)(3)；// 6
+add(1)(2, 3); // 6
+add(1, 2)(3); // 6
+add(1, 2, 3); // 6 -->
+
+    <!-- <script>
+        function add(...args1) {
+
+            function a(...args2) {
+                const params = args1.concat(args2);
+                return params.reduce((val, sum) => val + sum, 0)
+            }
+
+            a.toString = function () {
+                return a();
+            }
+
+            return a;
+
+        }
+
+
+
+        console.log(add(1), add(1, 3, 4));
+    </script> -->
+
+
+    <!-- 88 题 https://github.com/Advanced-Frontend/Daily-Interview-Question/blob/master/datum/summary.md -->
+
+
+    <script>
+        function asyncAdd(a, b, callback) {
+            setTimeout(function () {
+                callback(null, a + b);
+            }, 1000);
+        }
+
+        function createAdd(a, b = 0) {
+            return new Promise((resolve) => {
+                asyncAdd(a, b, (err, result) => {
+                    if (!err) {
+                        resolve(result);
+                    }
+                });
+            });
+        }
+
+        async function sum(...args) {
+            if (args.length > 1) {
+                const result = [];
+                for (let i = 0; i < args.length; i = i + 2) {
+                    result.push(createAdd(args[i], args[i + 1]));
+                }
+                return sum(...(await Promise.all(result)));
+            }
+            return args[0];
+        }
+
+
+    </script>
+</body>
+
+</html>
