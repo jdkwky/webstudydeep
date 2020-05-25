@@ -1,9 +1,18 @@
 <html>
-<script src="https://unpkg.com/vue/dist/vue.js"></script>
-
+<script src="https://cdn.bootcss.com/vue/2.5.10/vue.min.js"></script>
+<!-- <script crossorigin="anonymous" integrity="sha384-JsJ1FmMe2oIZGvToQfkmmfluNdqqvqbG3poZGiowJpK/QurT7Jr/bCs5QYUMiR4p" src="https://lib.baomitu.com/vue/2.6.11/vue.common.prod.js"></script> -->
 <body>
     <div id="app">
-        <div>{{ list }}</div>
+        <div v-for="(item, index) in list" :key="index">
+            <span>
+               <p>name</p>
+                <span></span>
+            </span>
+            <span>
+                age:
+                <span>{{ item.age }}</span>
+            </span>
+        </div>
     </div>
 
     <script>
@@ -14,13 +23,13 @@
             },
             mounted() {
                 setTimeout(() => {
-                    this.list[0] = 3
+                    this.list=[{name:1, age:1}];
                 }, 1000)
                 setTimeout(() => {
-                    this.list.length = 5
+                    this.list=[{name:2, age:2}];
                 }, 2000)
                 setTimeout(() => {
-                    this.$set(this.list, this.list)
+                    this.list=[{name:3, age:3}];
                 }, 3000)
             }
         })
