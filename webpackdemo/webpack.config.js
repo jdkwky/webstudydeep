@@ -13,35 +13,35 @@ const path = require('path');
  * 
  */
 
-module.exports={
-	devtool:'eval-source-map',
-	mode:'development',
-	context: path.resolve(__dirname),
-	entry:{
-		main:'./app/main.js',
-		utils:'./app/utils.js'
+module.exports = {
+	devtool: 'eval-source-map',
+	mode: 'development',
+	context: path.resolve(__dirname),  // 默认是配置文件根目录地址
+	entry: {
+		main: path.join(__dirname, 'app/main.js'), // 可以是绝对路径也可以是相对路径， 相对路径相对于context配置的路径
+		// utils: './app/utils.js'
 	},
-	output:{
-		path:__dirname+'/static',
-		filename:'js/[name]-[chunkHash:5].js',
-		// publicPath: '../../../'
+	output: {
+		path: path.join(__dirname, 'static'),  // 必须是绝对路径
+		filename: 'js/[name]-[chunkHash:5].js',  // 要输出的文件名称
+		publicPath: './'   // 引入文件是要加入的前缀
 	},
-	devServer:{
-		contentBase:'./public',
-		historyApiFallback:true,
-		inline:true,
-		port:9999
+	devServer: {
+		contentBase: './public',
+		historyApiFallback: true,
+		inline: true,
+		port: 9999
 	},
 
-	plugins:[
+	plugins: [
 		new CleanWebpackPlugin({
-			verbose:true
+			verbose: true
 		}),
 		new HtmlWebpackPlugin({
-			title:'my app',
+			title: 'my app',
 			// inject: false,
 			template: './public/index.html',
-			filename:'test/sindex.html'
+			filename: 'index.html'
 		})
 	]
 
