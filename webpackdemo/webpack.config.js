@@ -32,6 +32,17 @@ module.exports = {
 		inline: true,
 		port: 9999
 	},
+	module:{
+		rules:[
+			{
+				test: /\.js$/,
+				exclude:/node_modules/,
+				use:[{
+					loader: "./loader/console"
+				}]
+			}
+		]
+	},
 
 	plugins: [
 		new CleanWebpackPlugin({
