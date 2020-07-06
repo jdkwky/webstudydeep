@@ -1,7 +1,8 @@
 // __dirname是nodejs中的一个全局变量，它指向当前执行脚本所在目录
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const ConsoleBuildWebpackPlugin = require('./plugin/console');
 const path = require('path');
 
 
@@ -39,7 +40,14 @@ module.exports = {
 				test: /\.js$/,
 				exclude:/node_modules/,
 				use:[{
-					loader: "./loader/console"
+					loader: "./loader/console",
+					options:{
+						name:'tetete'
+					}
+				},{
+					loader:'./loader/frank'
+				},{
+					loader:'./loader/async'
 				}]
 			}
 		]
@@ -65,7 +73,8 @@ module.exports = {
 			template: './public/index.html',
 			filename: 'index.html'
 		}),
-		new VueLoaderPlugin()
+		new VueLoaderPlugin(),
+		new ConsoleBuildWebpackPlugin()
 	]
 
 

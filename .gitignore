@@ -1,3 +1,4 @@
 # 要忽略的文件
 webpackdemo/node_modules/
 node_modules/
+webpackdemo/static

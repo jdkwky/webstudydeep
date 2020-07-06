@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>event</title>
+    <style>
+        body{
+            height: 500px;
+            width: 100%;
+            background-color: aquamarine;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        (function(){
+            console.log('in this');
+            
+            document.body.addEventListener('mousedown',logMouseButton);
+            function logMouseButton(e) {
+                if (typeof e === 'object') {
+                    switch (e.button) {
+                    case 0:
+                        console.log('Left button clicked.');
+                        break;
+                    case 1:
+                        console.log('Middle button clicked.');
+                        break;
+                    case 2:
+                        console.log('Right button clicked.');
+                        break;
+                    default:
+                        console.log(`Unknown button code: ${e.button}`);
+                    }
+                }
+            }
+
+            document.body.addEventListener('mouseup',()=>{
+                    console.log('mouse up outer');
+                    
+            })
+
+
+        })();
+    </script>
+</body>
+</html>
