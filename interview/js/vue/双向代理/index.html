@@ -9,9 +9,157 @@
 
 <body>
     <script>
-        function defineReactive() {
+        // 给数据上代理
+        /**
+         * @obj 对象
+         * @key key值
+         * @val value值
+         * @customerSetter 默认的setter方法
+         * @shallow 是浅监听还是深监听
+         */
+        function defineReactive(obj, key, val) {
+            const dep = new Dep();
+            Object.defineProperty(obj, key, {
+                enumerable: true,
+                configurable: true,
+                get: function reactiveGetter() {
+                    const value = val;
+                    dep.depend();
+                    return value
+                },
+                set: function reactiveSetter(newVal) {
+                    const value = val;
+                    console.log(newVal, val, 'newVal, val');
+
+                    if (newVal === value || (newVal !== newVal && value !== value)) {
+                        return
+                    }
+                    val = newVal;
+                    dep.notify()
+                }
+            })
+        }
+        let uid = 0;
+        // 监听者
+        class Dep {
+            constructor() {
+                this.subs = [];
+                this.id = uid++;
+            }
+
+            addSub(sub) {
+                this.subs.push(sub)
+            }
+
+            removeSub(sub) {
+                remove(this.subs, sub)
+            }
+
+            depend() {
+                if (Dep.target) {
+                    Dep.target.addDep(this)
+                }
+            }
+
+            notify() {
+                const subs = this.subs.slice()
+                console.log(subs, 'subs notify');
+
+                for (let i = 0, l = subs.length; i < l; i++) {
+                    subs[i].update()
+                }
+            }
+        }
+        let watcherId = 0;
+        const watcherQuene = [];
+        const hasWatcher = new Set();
+        // 观察者
+        class Watcher {
+            constructor() {
+                this.newDepIds = new Set()
+                this.id = watcherId;
+            }
+            addDep(dep) {
+                // 有一些去重操作
+                const id = dep.id;
+                console.log(dep, dep.id, 'addDep');
+
+                if (!this.newDepIds.has(id)) {
+                    this.newDepIds.add(id)
+                    dep.addSub(this)
+                }
+
+            }
+            update() {
+                const id = this.id;
+
+                if (!hasWatcher.has(id)) {
+                    hasWatcher.add(id)
+                    watcherQuene.push(this)
+                }
+                if (!waiting) {
+                    waiting = true;
+                    nextTick(() => {
+                        waiting = false;
+                        watcherQuene.forEach(watcher => {
+                            watcher.run();
+                        })
+                    })
+                }
+            }
+            run() {
+                console.log('视图更新了~~~~');
+            }
 
         }
+
+        const callbacks = [];
+        let waiting = false;
+        function flushCallbacks() {
+            const copies = callbacks.slice(0)
+            callbacks.length = 0
+            for (let i = 0; i < copies.length; i++) {
+                copies[i]()
+            }
+        }
+        function nextTick(fn) {
+
+            callbacks.push(() => {
+                return fn();
+            })
+            setTimeout(flushCallbacks, 0);
+        }
+
+
+
+        var data = {
+            name: '',
+            age: ''
+        }
+
+        function observe(obj) {
+            Dep.target = new Watcher();
+            Object.keys(obj).forEach(key => {
+                defineReactive(obj, key, obj[key])
+            })
+        }
+
+        observe(data);
+        console.log(data.name, data.age);
+
+        data.name = 'wky'
+        setTimeout(() => {
+            // console.log();
+            data.name = 'test';
+            data.name = '';
+            data.name = 'age';
+
+
+        }, 1000)
+        setTimeout(() => {
+            data.age = '18'
+        }, 2000)
+
     </script>
 </body>
 
