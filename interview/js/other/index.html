@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <!-- <script>
+            function Foo() {
+                getName = function() {
+                    console.log(1);
+                };
+                return this;
+            }
+
+            Foo.getName = function() {
+                console.log(2);
+            };
+
+            Foo.prototype.getName = function() {
+                console.log(3);
+            };
+            getName(); // 5
+            var getName = function() {
+                console.log(4);
+            };
+            function getName() {
+                console.log(5);
+            }
+            getName(); // 4
+
+            Foo.getName(); //2;
+            Foo().getName(); // 1
+
+            getName(); //1
+
+            new Foo.getName(); //  2;
+            new Foo().getName(); // 3
+            new new Foo().getName(); // 3
+        </script> -->
+        <!-- <script>
+            async function t1() {
+                let a = await '123';
+                console.log(a);
+            }
+            t1(); // 123
+
+            async function t2() {
+                let a = await new Promise(resolve => {});
+                console.log(a);
+            }
+            t2(); //
+
+            async function t3() {
+                let a = await new Promise(resolve => {
+                    resolve();
+                });
+                console.log(a);
+            }
+            t3(); // undefined
+
+            async function t4() {
+                let a = await new Promise(resolve => {
+                    resolve('hello');
+                });
+                console.log(a);
+            }
+            t4(); // hello
+
+            async function t5() {
+                let a = await new Promise(resolve => {
+                    resolve('hello');
+                }).then(() => 'lala');
+                console.log(a);
+            }
+            t5(); // lala
+        </script> -->
+        <!-- <script>
+            new Promise((resolve, reject) => {
+                console.log('A');
+                setTimeout(() => {
+                    console.log('B');
+                }, 0);
+                console.log('C');
+                resolve();
+                console.log('D');
+            })
+                .then(() => {
+                    console.log('E');
+                    new Promise((resolve, reject) => {
+                        console.log('F');
+                        resolve();
+                        console.log('G');
+                    })
+                        .then(() => {
+                            setTimeout(() => {
+                                console.log('H');
+                            }, 0);
+                            console.log('I');
+                        })
+                        .then(() => {
+                            console.log('J');
+                        });
+                })
+                .then(() => {
+                    console.log('k');
+                });
+
+            setTimeout(() => {
+                console.log('L');
+            }, 0);
+
+            new Promise((resolve, reject) => {
+                console.log('M');
+                resolve();
+            }).then(() => {
+                setTimeout(() => {
+                    new Promise((resolve, reject) => {
+                        console.log('N');
+                        resolve();
+                    })
+                        .then(() => {
+                            setTimeout(() => {
+                                console.log('O');
+                            }, 0);
+                        })
+                        .then(() => {
+                            console.log('P');
+                        });
+                }, 0);
+            });
+
+            console.log('Q');
+        </script> -->
+
+        <!-- <script>
+            /*
+                给定一个数组，它的第i个元素是一直给定股票第i天的价格。
+                如果你最多只允许完成一笔交易（买入和卖出一只股票），设计一个算法来计算你所能获取的最大利润。
+                注意：你不能再买入股票前卖出股票
+            */
+
+            function maxpro(list = []) {
+                let min = list[0];
+                let max = 0;
+                for (let i = 1, len = list.length; i < len; i++) {
+                    const value = list[i];
+                    if (value > min) {
+                        max = max > value - min ? max : value - min;
+                    } else {
+                        min = value;
+                    }
+                }
+                return max;
+            }
+            console.log(maxpro([7, 1, 5, 3, 6, 4])); // 5
+        </script> -->
+        <script>
+            /**
+             * 将一个html字符串变成树的形式
+             * <div id="main" data-x="hello">Hello<span id="sub" /></div>
+             * /@abstract
+             *
+             */
+
+            function parseHtml(html) {
+                const arrowlist = []; // 存放 < 或者 > 或者 />
+                const tagList = []; // 存放tag
+                let attributes = '';
+                let resultObj = null;
+                for (let i = 0, len = html.length; i < len; i++) {
+                    const current = html[i];
+                    switch (current) {
+                        case '<':
+                            arrowlist.push(current);
+                            if (attributes) {
+                                resultObj.text = attributes;
+                            }
+                            // if (tagList.length > 0) {
+                            //     resultObj.children = [];
+                            // }
+                            attributes = '';
+
+                            break;
+                        case '>':
+                            arrowlist.pop();
+                            if (arrowlist.length == 0) {
+                                // 必须是成对出现的
+                                // 计算tag
+                                console.log(attributes, 'attributes');
+                                if (attributes[0] != '/') {
+                                    const tags = attributes
+                                        .split(' ')
+                                        .filter(val => val && val != '/');
+                                    const attriList = tags.slice(1) || [];
+                                    let selfClose = false;
+                                    if (
+                                        attributes[attributes.length - 1] == '/'
+                                    ) {
+                                        selfClose = true;
+                                    } else {
+                                        tagList.push(tags[0]);
+                                    }
+                                    // 计算属性
+                                    const obj = {
+                                        tag: tags[0],
+                                        selfClose: selfClose,
+                                        attributes: attriList.map(val => {
+                                            const [key, value] = val.split('=');
+                                            return {
+                                                key,
+                                                value
+                                            };
+                                        })
+                                    };
+
+                                    if (resultObj) {
+                                        if (resultObj.children) {
+                                            resultObj.children.push(obj);
+                                        } else {
+                                            resultObj.children = [obj];
+                                        }
+                                    } else {
+                                        resultObj = obj;
+                                    }
+                                } else {
+                                    tag = attributes.split('/');
+                                    tagList.pop();
+                                }
+                                attributes = '';
+                            }
+                            break;
+                        default:
+                            attributes += current;
+                            break;
+                    }
+                }
+                return resultObj;
+            }
+
+            const result = parseHtml(
+                '<div id="main" data-x="hello">Hello<span id="sub" /></div>'
+            );
+            console.log(result, 'result');
+        </script>
+    </body>
+</html>

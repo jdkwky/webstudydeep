@@ -1,8 +1,8 @@
 window.onload = function() {
     var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     var buffer = null;
-    var offAudioCtx = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(1, 2, 44100);
-    
+    var offAudioCtx = new (window.OfflineAudioContext ||
+        window.webkitOfflineAudioContext)(1, 2, 44100);
 
     // 通过文件获取音频数据
     function getAudioByFile(id) {
@@ -13,7 +13,7 @@ window.onload = function() {
             fr.onload = function(event) {
                 // 文件里的文本会在这里被打印出来
                 console.log(event.target.result);
-                offAudioCtx.decodeAudioData(event.target.result).then(res=>{
+                offAudioCtx.decodeAudioData(event.target.result).then(res => {
                     playFun(res);
                     // console.log('===========================');
                     // console.log(res);
@@ -37,7 +37,7 @@ window.onload = function() {
         ajaxRequest.onload = function() {
             var audioData = ajaxRequest.response;
             console.log('===========================');
-            console.log('audioData',audioData);
+            console.log('audioData', audioData);
             console.log('===========================');
             offAudioCtx.decodeAudioData(
                 audioData,
@@ -53,10 +53,12 @@ window.onload = function() {
         ajaxRequest.send();
         // 结束 通过ajax请求获取数据
     }
-    
-    document.getElementById('byxhr').onclick = function(){
-        getAudioByXHR('https://ks3-cn-beijing.ksyun.com/videodb/smarttag/extractAudio/2000073586/f70284f8-8033-43dc-82fd-abd19d9539ac/1.mp3');
-    }
+
+    document.getElementById('byxhr').onclick = function() {
+        getAudioByXHR(
+            'https://ks3-cn-beijing.ksyun.com/videodb/smarttag/extractAudio/2000073586/f70284f8-8033-43dc-82fd-abd19d9539ac/1.mp3'
+        );
+    };
 
     function playFun(data) {
         buffer = data;
@@ -66,23 +68,24 @@ window.onload = function() {
     (arr = new Float32Array()),
         (arrAll = new Uint8Array()),
         (requestAnimationFrame =
-            window.requestAnimationFrame || window.webkitrequestAnimationFrame || window.mozrequestAnimationFrame); //兼容
+            window.requestAnimationFrame ||
+            window.webkitrequestAnimationFrame ||
+            window.mozrequestAnimationFrame); //兼容
 
-    function fn() { 
-        
+    function fn() {
         const channels = buffer.numberOfChannels || 2;
-        const arr = new Float32Array(buffer.getChannelData(0).length);
+        arr = new Float32Array(buffer.getChannelData(0));
         console.log('===========================');
         console.log(arr);
         console.log('===========================');
-        for( let j = 0 ; j < buffer.getChannelData(0).length;j++ ){
+        for (let j = 0; j < buffer.getChannelData(0).length; j++) {
             let sum = 0.5;
             // for (let i = 0; i < channels; i++) {
             //     // sum  = parseFloat(sum + buffer.getChannelData(i)[j]);
             // }
             // arr[j] = sum;
         }
-        
+
         draw(arr); // 频域数据作为参数传入绘制函数draw
         // playAudio();
     }
@@ -106,7 +109,12 @@ window.onload = function() {
             var rectHeight = arr[i] * height * 0.8;
             ctx.fillStyle = line;
             if (rectHeight > 0) {
-                ctx.fillRect(totalLines * 0.5, height / 2 - rectHeight, 0.5, rectHeight);
+                ctx.fillRect(
+                    totalLines * 0.5,
+                    height / 2 - rectHeight,
+                    0.5,
+                    rectHeight
+                );
             } else {
                 ctx.fillRect(totalLines * 0.5, height / 2, 0.5, -rectHeight);
             }
@@ -187,7 +195,11 @@ window.onload = function() {
             var outputBuffer = audioProcessingEvent.outputBuffer;
 
             // Loop through the output channels (in this case there is only one)
-            for (var channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
+            for (
+                var channel = 0;
+                channel < outputBuffer.numberOfChannels;
+                channel++
+            ) {
                 var inputData = inputBuffer.getChannelData(channel);
                 var outputData = outputBuffer.getChannelData(channel);
 
@@ -199,7 +211,9 @@ window.onload = function() {
                 }
             }
             const currentTime = audioCtx.currentTime;
-            const left = Math.round((totalLines * currentTime * 10) / (totalTime * 10));
+            const left = Math.round(
+                (totalLines * currentTime * 10) / (totalTime * 10)
+            );
             line.style.left = Math.round(left) * 0.5 + 'px';
             if (currentTime > totalTime) {
                 // source.end();
