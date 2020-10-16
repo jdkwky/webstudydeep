@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack:///./src/a.js"],"names":["module","exports"],"mappings":";;;;;;;;;AAAAA,MAAM,CAACC,OAAP,GAAiB,OAAjB,C","file":"common~index~other.bundle.ee41dec7.js","sourcesContent":["module.exports = 'nihao';\r\n"],"sourceRoot":""}
