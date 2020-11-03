@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>正则表达式</title>
+    </head>
+    <body>
+        <!-- Es6 新增正则 start  -->
+        <script>
+            var unicodeStr = '😜-test';
+            var regx = /^.-/;
+            var regxUnicode = /^.-/u;
+            console.log(regx.test(unicodeStr), 'common');
+            if (regxUnicode.test(unicodeStr)) {
+                console.log(RegExp.$1);
+            }
+
+            var re = /(\w+)\s(\w+)/;
+            var str = 'John Smith';
+            // str.replace(re, '$2, $1'); // "Smith, John"
+            console.log(RegExp.$1); // "John"
+            console.log(RegExp.$2); // "Smith"
+        </script>
+        <!-- Es6 新增正则 end -->
+    </body>
+</html>

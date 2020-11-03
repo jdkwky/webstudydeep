@@ -1,100 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>响应式原理</title>
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>响应式原理</title>
-</head>
-
-<body>
-    <script>
-
-        function observeReactive(obj, key, val) {
-            const dep = new Dep();
-            Object.defineProperty(obj, key, {
-                enumerable: true,
-                configurable: true,
-                set(newVal) {
-                    if (newVal == val) {
-                        return;
+    <body>
+        <script>
+            function observeReactive(obj, key, val) {
+                const dep = new Dep();
+                Object.defineProperty(obj, key, {
+                    enumerable: true,
+                    configurable: true,
+                    set(newVal) {
+                        if (newVal == val) {
+                            return;
+                        }
+                        val = newVal;
+                        dep.nodify();
+                    },
+                    get() {
+                        dep.addSubs(Dep.target);
+                        return val;
                     }
-                    val = newVal;
-                    dep.nodify();
-                },
-                get() {
-                    dep.addSubs(Dep.target);
-                    return val
+                });
+            }
+
+            function observe(obj) {
+                Object.keys(obj).forEach(val => {
+                    observeReactive(obj, val, obj[val]);
+                });
+            }
+
+            function Watcher() {}
+            Watcher.prototype = {
+                construtor: Watcher,
+                update() {
+                    console.log('试图更新了~~~');
+                    console.log('===========');
                 }
-            })
-        }
+            };
 
-        function observe(obj) {
-            Object.keys(obj).forEach(val => {
-                observeReactive(obj, val, obj[val])
-            })
-        }
-
-        function Watcher() {
-
-        }
-        Watcher.prototype = {
-            construtor: Watcher,
-            update() {
-                console.log('试图更新了~~~');
-                console.log('===========');
-
+            function Dep() {
+                this.subs = [];
             }
-        }
 
+            Dep.prototype = {
+                construtor: Dep,
+                addSubs(watcher) {
+                    this.subs.push(watcher);
+                    console.log(this.subs, 'this.subs');
+                },
+                nodify() {
+                    const subs = this.subs || [];
+                    subs.forEach(val => {
+                        val.update();
+                    });
+                }
+            };
 
-        function Dep() {
-            this.subs = [];
-        }
+            Dep.target = null;
 
-        Dep.prototype = {
-            construtor: Dep,
-            addSubs(watcher) {
-                this.subs.push(watcher);
-                console.log(this.subs, 'this.subs');
-
-
-            },
-            nodify() {
-                const subs = this.subs || [];
-                subs.forEach(val => {
-                    val.update();
-                })
+            function Vue(options) {
+                this._data = options.data;
+                observe(this._data);
+                // 对于data是将同一个watcher对象存储到订阅器中
+                Dep.target = new Watcher();
+                Dep.target.update();
             }
-        }
+            // 对于 computed 是将所有的key, data、methods中不存在的key值放到watcher中，然后增量添加到响应的dep中
+            // 例如：
+            /**
+             *  computed:{
+             *      username () {
+             *          return this.firstName+ this.secondName;
+             *      }
+             *  }
+             *
+             *
+             *   new watchers(vm,'username',usename());
+             *
+             *   将这个watcher对象添加到 firstName 的dep的subs中，同时也添加到 secondName 中的dep subs 中，
+             *   这样 当 firstName 和secondName更新时就会 更新username数据 同时也会更新视图
+             *
+             *
+             *
+             *
+             ** /
 
-        Dep.target = null;
+            let o = new Vue({
+                data: {
+                    test: 'test',
+                    name: ''
+                }
+            });
+            console.log(o._data.name, o._data.name);
+            // o._data.test = 'i m test';
+            // o._data.test = 'you is test';
+            o._data.name = 'name';
 
-        function Vue(options) {
-            this._data = options.data;
-            observe(this._data);
-            Dep.target = new Watcher();
-            Dep.target.update();
-
-        }
-
-        let o = new Vue({
-            data: {
-                test: 'test',
-                name: ''
-            }
-        })
-        console.log(o._data.name, o._data.name);
-        // o._data.test = 'i m test';
-        // o._data.test = 'you is test';
-        o._data.name = 'name';
-
-        console.log(o._data.name);
-
-
-
-
-    </script>
-</body>
-
+            console.log(o._data.name);
+        </script>
+    </body>
 </html>
