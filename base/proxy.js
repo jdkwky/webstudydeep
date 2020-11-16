@@ -25,11 +25,10 @@
 //     });
 //     fn.call(obj, 'name');
 
-
 //     // reflect
 
 //     var reflectObj = {
-//         foo: 1, 
+//         foo: 1,
 //         bar : 2,
 //         get baz(){
 //             return this.foo + this.bar;
@@ -48,53 +47,47 @@ function defineReactive(obj) {
     for (let item in obj) {
         let value = obj[item];
         Object.defineProperty(obj, item, {
-            set: function (newvalue) {
+            set: function(newvalue) {
                 console.log(value, newvalue, 'value newvalue');
 
                 value = newvalue;
             },
-            get: function () {
+            get: function() {
                 console.log('get  value', value);
                 return value;
             }
-        })
+        });
     }
-
 }
 
-
-
-function defineReactiveProxy() {
-    var obj = new Proxy({}, {
-        set: function (target, key, value, receiver) {
+function defineReactiveProxy(obj) {
+    return new Proxy(obj, {
+        set: function(target, key, value, receiver) {
             console.log(`setting ${key}`);
             return Reflect.set(target, key, value, receiver);
         },
-        get: function (target, key, receiver) {
-            console.log(`get ${key}`);
+        get: function(target, key, receiver) {
+            if (typeof target[key] == 'object') {
+                return defineReactiveProxy(target[key]);
+            }
             return Reflect.get(target, key, receiver);
         }
     });
-    console.log(obj, 'obj proxy');
-    return obj;
-
-
 }
 
-var obj1 = { a: 1, b: '', c: '' };
+// var obj1 = defineReactiveProxy({});
 
-defineReactive(obj1);
-// console.log(obj1, 'obj');
-obj1.a
-obj1.a = 2;
-obj1.b = 3;
-console.log(obj1);
+// obj1.p = { a: 1 };
+// console.log(obj1.p.a);
+// obj1.p.b = 2;
+// console.log(obj1.p.b);
 
-// var obj2 = {};
-// var obj2 = defineReactiveProxy(obj2);
-// // console.log(obj1.a);
-// // obj1.b = 2;
-// // obj1.a = 3;
-// obj2.a = 1;
-// obj2.a;
-// obj2.list = [1, 2, 3];
+// obj1.list = [{ a: 1 }];
+// obj1.list[0].a = 2;
+// console.log();
+// obj1.list.push(1);
+// console.log(obj1.list);
+
+var list = defineReactiveProxy([]);
+// list.push(1);
+list[0] = 1;
