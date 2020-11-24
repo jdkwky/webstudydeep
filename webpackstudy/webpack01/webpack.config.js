@@ -10,12 +10,16 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
     optimization: {
+        minimize: true,
         // 优化项
         minimizer: [
             new UglifyjsWebpackPlugin({
                 exclude: /node_modules/
             }),
             new OptmizeCss()
+            // compiler =>{
+            //     console.error('test minimizer ');
+            // }
         ],
         splitChunks: {
             cacheGroups: {
@@ -45,7 +49,7 @@ module.exports = {
         // }
         // 有服务端 不想用代理来处理 能不能在服务端中启动webpack端口 用服务端端口， 直接在服务端调用webapck启动
     },
-    mode: 'development', // 模式默认两种  production  development
+    mode: 'none', // 模式默认两种  production  development
     entry: {
         index: './src/index.js',
         other: './src/other.js'
@@ -81,9 +85,9 @@ module.exports = {
             $: 'jquery'
         }),
         new webpack.IgnorePlugin(/\.\/locale/, /moment/),
-        new webpack.DllReferencePlugin({
-            manifest: path.resolve(__dirname, 'dist', 'manifest.json')
-        })
+        // new webpack.DllReferencePlugin({
+        //     manifest: path.resolve(__dirname, 'dist', 'manifest.json')
+        // })
     ],
     resolve: {
         alias: {

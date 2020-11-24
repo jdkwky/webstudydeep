@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///src/a.css","webpack:///src/index.css"],"names":[],"mappings":"AAAA;IACI,aAAa;AACjB;;ACAA;IACI,eAAe;IACf,gCAAwB;QAAxB,4BAAwB;YAAxB,wBAAwB;AAC5B","file":"main.css","sourcesContent":["body {\n    color: yellow;\n}\n","@import 'a.css';\n\nbody {\n    background: red;\n    transform: rotate(45deg);\n}\n"],"sourceRoot":""}

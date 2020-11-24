@@ -1,7 +1,7 @@
 // const hello = require('./a');
 // console.log(hello, 'haha');
 
-// require('./index.css');
+require('./index.css');
 // require('./less.less');
 
 // class A {

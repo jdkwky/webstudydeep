@@ -14,6 +14,7 @@
                     enumerable: true,
                     configurable: true,
                     set(newVal) {
+                        console.log('set newVal', newVal);
                         if (newVal == val) {
                             return;
                         }
@@ -50,7 +51,7 @@
                 construtor: Dep,
                 addSubs(watcher) {
                     this.subs.push(watcher);
-                    console.log(this.subs, 'this.subs');
+                    
                 },
                 nodify() {
                     const subs = this.subs || [];
@@ -69,6 +70,18 @@
                 Dep.target = new Watcher();
                 Dep.target.update();
             }
+
+            let o = new Vue({
+                data: {
+                   list:[1,2],
+                   name: ''
+                }
+            });
+            console.log(o._data.list[0], o._data.name);
+            o._data.list[0] = 2;
+            o._data.name = 'wky'
+            
+            // console.log()
             // 对于 computed 是将所有的key, data、methods中不存在的key值放到watcher中，然后增量添加到响应的dep中
             // 例如：
             /**
@@ -87,7 +100,6 @@
              *
              *
              *
-             ** /
 
             let o = new Vue({
                 data: {
@@ -101,6 +113,7 @@
             o._data.name = 'name';
 
             console.log(o._data.name);
+            */
         </script>
     </body>
 </html>

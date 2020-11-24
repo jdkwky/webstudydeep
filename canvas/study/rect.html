@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>draw rect</title>
+</head>
+<body>
+
+    <canvas width="1000" height="1000" id="canvas"></canvas>
+    <script>
+        const  canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        // context.lineJoin = 'round';
+        // context.lineWidth = 1;
+        // context.font = '20px April';
+        // context.fillText('Click anywhere to erase', 175, 200);
+        
+        // context.strokeStyle = 'goldenrod';
+        // context.fillStyle = 'rgba(0,0,255, 0.5)';
+        // context.strokeRect(75, 100,200,200);
+        // context.fillRect(325, 100, 200, 200);
+        // console.log(context, 'context')
+       
+        // context.canvas.onmousedown = function(){
+        //     context.clearRect(0,0,canvas.width, canvas.height);
+        // }
+        // context.beginPath();
+        // context.rect(10,10, 100,100);
+        // context.stroke();
+        // context.beginPath();
+        // context.rect(50,50, 100,100);
+        // context.stroke();
+        
+            //  绘制直线
+        // context.lineWidth = 1;
+        // context.beginPath();
+        // context.moveTo(50,10);
+        // context.lineTo(450,10);
+        // context.stroke();
+        // context.beginPath();
+        // context.moveTo(50.5, 50.5);
+        // context.lineTo(450.5,50.5);
+        // context.stroke();
+
+        //  绘制圆角
+
+        context.moveTo(150,20);
+        context.arcTo(150, 100, 50, 20, 30);
+
+        context.stroke();
+
+
+    </script>
+</body>
+</html>
