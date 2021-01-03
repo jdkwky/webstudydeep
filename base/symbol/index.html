@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            //  Symbol简易实现
+            (function(){  
+                var getOVFnName = (function(){
+                    let index = 0;
+                    return function(desc) {
+                        index = index +1;
+                        return index + '-' + desc;
+                    }
+                })();
+                // window.SymbolPolify  = SymbolPolify
+                function SymbolPolify (desc){
+
+                    var symbol = Object.create({
+                        toString(){
+                            return this.__name__
+                        } 
+                    })
+                    Object.defineProperty(symbol, '__name__', {
+                        value: getOVFnName(desc)
+                    });
+                    return symbol;
+                }
+                
+                var d = SymbolPolify('dddd');
+                var a = SymbolPolify('aaaaa');
+                console.log(d, 'd');
+                console.log(a, 'a');
+
+            })()
+            
+            //  Symbol.for Symbol.forKey
+
+            // Symbol.for 创建Symbol数据  Symbol.keyFor 返回已创建Symbol数据的key值
+            console.log(Symbol.for('eeee'));
+            console.log(Symbol.keyFor(Symbol.for('eeee')))
+
+            var symbol1 = Symbol('aa');
+            var symbol2 = Symbol('bb');
+
+            console.log(symbol1 == symbol2);
+
+
+
+            // 具体使用场景
+            var obj1 ={
+                [Symbol('name')]:'zhangsan'
+            }
+            var obj2 = {
+                [Symbol('name')]:'李四'
+            }
+
+            var obj3 = Object.assign(obj1, obj2);
+
+            console.log(obj3,'obj3');
+
+            var obj11 ={
+                name:'zhangsan'
+            }
+            var obj21 = {
+                name:'李四'
+            }
+
+            var obj31 = Object.assign(obj11, obj21);
+            console.log(obj31);
+        </script>
+    </body>
+</html>

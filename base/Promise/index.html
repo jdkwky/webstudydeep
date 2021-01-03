@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>promise</title>
+    </head>
+    <body>
+        <script>
+            // 错误处理
+            // var p = new Promise((resolve)=>{
+            //     resolve(42);
+            // });
+            // try{
+            //     p.then((val)=>{
+            //         console.log(val,'val');
+            //         throw 'errrr'
+            //     },err =>{
+            //         console.log(err,'err');
+            //     })
+            // }catch(er){
+            //     console.log(er);
+            // }
+
+            // promise.all
+
+            // const promiseArray = [
+            //     Promise.resolve(1),
+            //     new Promise(resolve => {
+            //         setTimeout(() => {
+            //             resolve(2);
+            //         }, 2000);
+            //     }),
+            //     new Promise((resolve, reject) => {
+            //         setTimeout(() => {
+            //             resolve(3);
+            //         }, 500);
+            //     })
+            // ];
+
+            // function promiseAll(list) {
+            //     const result = [];
+            //     const first = list.slice(0, 1)[0];
+            //     const others = list.slice(1);
+            //     function next(pro) {
+            //         return new Promise((resolve, reject) => {
+            //             if (pro.then) {
+            //                 pro.then(val => {
+            //                     result.push(val);
+            //                     resolve(result);
+            //                 }).catch(err => {
+            //                     console.log(err, 'err');
+            //                     reject(err);
+            //                 });
+            //             } else {
+            //                 reject();
+            //             }
+            //         });
+            //     }
+            //     return others.reduce(
+            //         (s, n) => s.then(() => next(n)),
+            //         next(first)
+            //     );
+            // }
+            // // Promise.all(promiseArray).then(result =>{
+            // //     console.log(result, 'result');
+            // // });
+
+            // function promiseAll2(promises) {
+            //     return new Promise(function(resolve, reject) {
+            //         var resolvedCounter = 0;
+            //         var promiseNum = promises.length;
+            //         var resolvedValues = new Array(promiseNum);
+            //         for (let i = 0; i < promiseNum; i++) {
+
+            //             Promise.resolve(promises[i]).then(
+            //                 function(value) {
+            //                     resolvedCounter++;
+            //                     resolvedValues[i] = value;
+            //                     if (resolvedCounter == promiseNum) {
+            //                         return resolve(resolvedValues);
+            //                     }
+            //                 },
+            //                 function(reason) {
+            //                     return reject(reason);
+            //                 }
+            //             );
+
+            //         }
+            //     });
+            // }
+
+            // promiseAll(promiseArray)
+            //     .then(result => {
+            //         console.log(result, 'result');
+            //     })
+            //     .catch(err => {
+            //         console.log(err, 'top err');
+            //     });
+            // promiseAll2(promiseArray)
+            //     .then(result => {
+            //         console.log(result, 'result');
+            //     })
+            //     .catch(err => {
+            //         console.log(err, 'top err');
+            //     });
+
+            //  手写Promise
+
+            // new Promise((resolve, reject) => {
+            //     setTimeout(() => {
+            //         resolve(2);
+            //     }, 1000);
+            // })
+            //     .then(value => {
+            //         console.log(value);
+            //         return 1;
+            //     })
+            //     .then(value => {
+            //         console.log(value);
+            //     });
+
+            console.log('--------------------------');
+
+            class _Promise {
+                static PENDING = 0;
+                static FULFILLED = 1;
+                static REJECTED = 2;
+
+                constructor(fn) {
+                    this.status = _Promise.PENDING;
+                    this.handlers = [];
+                    this.value = null;
+                    this.error = null;
+                    fn.call(this, this.resolve, this.reject);
+                }
+
+                resolve = value => {
+                    this.status = _Promise.FULFILLED;
+                    this.value = value;
+                    setTimeout(()=>{
+                        this.handlers.forEach(this.runHandle);
+                    },0)
+                };
+
+                reject = error => {
+                    this.status = _Promise.REJECTED;
+                    this.value = error;
+                    setTimeout(()=>{
+                        this.handlers.forEach(this.runHandle);
+                    },0)
+                    
+                };
+                addHandlers = obj => {
+                    this.handlers.push(obj);
+                };
+                runHandle = ({ successFn, catchFn, resolve, reject }) => {
+                    if (this.status == _Promise.PENDING) return;
+                    if (this.status == _Promise.FULFILLED) {
+                        const result = successFn && successFn.call(this, this.value);
+                        if( result instanceof _Promise){
+                            return result.then(val=>resolve(val));
+                        }else{
+                            return resolve(result || this.value)
+                        }
+                    }
+                    if (this.status == _Promise.REJECTED) {
+                        return reject(
+                            catchFn && catchFn.call(this, this.error)
+                        );
+                    }
+                };
+                then = (successFn, catchFn) => {
+                    return new _Promise((resolve, reject) => {
+                        this.addHandlers({
+                            successFn,
+                            catchFn,
+                            resolve,
+                            reject
+                        });
+                    });
+                };
+            }
+
+            new _Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve(2);
+                }, 2000);
+                // resolve(2);
+                
+            })
+                .then(value => {
+                    console.log(value)
+                    return new _Promise(resolve => {
+                        setTimeout(() => {
+                            resolve(3);
+                        }, 2000);
+                        // resolve(3);
+                    });
+                })
+                .then(value => {
+                    console.log(value);
+                });
+        </script>
+    </body>
+</html>

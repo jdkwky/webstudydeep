@@ -42,10 +42,7 @@ function Promise(fn) {
     }
 
     function doResolve(fn, resolve, reject) {
-        console.log(fn, 'fn')
         fn(function (reslut) {
-            console.log(reslut, 'result');
-
             resolve(reslut);
         }, function (reslut) {
             reject(reject);;
@@ -53,8 +50,6 @@ function Promise(fn) {
     }
 
     function resolve(newResult) {
-        console.log(newResult, 'newResult');
-
         // 判断newResult是否具有thenabel对象
         const then = getThen(newResult);
         if (then) {

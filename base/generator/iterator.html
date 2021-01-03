@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iterator</title>
+</head>
+<body>
+    <script>
+        var FIB = {
+            [Symbol.iterator](){
+                var n1 = 1, n2 =1;
+                return {
+                    [Symbol.iterator](){
+                        return this;
+                    },
+                    next(){
+                        var current = n2;
+                        n2 = n1;
+                        n1 = n1 + current;
+
+                        return { value: current, done: false }
+                    },
+                    return(v){
+                        return {
+                            value: v, done: true
+                        }
+                    }
+                }
+            }
+        }
+
+        for(let fib of FIB){
+            console.log('fib:', fib);
+            if(fib > 50){
+                break;
+            }
+        }
+    </script>
+</body>
+</html>

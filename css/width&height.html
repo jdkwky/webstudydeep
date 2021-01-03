@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .test-table {
+            width: 200px;
+        }
+        .position-wrap {
+            height: 500px;
+            width: 200px;
+            background-color: aquamarine;
+            position: relative;
+        }
+        .absolute-width {
+            position: absolute;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            top: 10px;
+            background-color: blueviolet;
+        }
+        .miner-width{
+            /* background-color: brown; */
+        }
+        .english-width,.chiness-width{
+            width: 0;
+            display: inline-block;
+            color: #fff;
+        }
+
+        .english-width:before{
+            content: 'love 我 love';
+            outline: 1px solid black;
+
+        }
+        .chiness-width{
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <table class="test-table"> 
+        <tr>
+            <td>第一列第一列第一列第一列第一列第一列第一列第一列第一列</td>
+            <!-- 折行的时候英文单词不会折行 但是中文会随便折行 -->
+            <td>second second second second second secondsecond secondsecond secondsecond second second second second second second second second second</td>
+            <td>第三列第三列第三列第三列第三列第三列第三列第三列第三列第三列第三列第三列第三列第三列</td>
+        </tr>
+    </table>
+
+    <!-- position ： absolute 元素宽度, 最小宽度由内部元素大小决定 除非是left， right 同时有值 或者 bottom，top同时存在，
+        如果left right 同时存在则宽度由外部元素大小决定，高度还是由内部大小决定
+    -->
+    <div class="position-wrap">
+        <div class="absolute-width">
+            hahahhhaahahaa
+        </div>
+    </div>
+
+    <!-- 最小宽度 -->
+    <div class="miner-width">
+        <span class="english-width">
+            love 我 love
+        </span>
+        <!-- <span class="chiness-width">我</span> -->
+    </div>
+</body>
+</html>

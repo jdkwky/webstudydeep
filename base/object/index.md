@@ -223,3 +223,6 @@
         }
     ```
 
+
+Object.defineProperty()
+

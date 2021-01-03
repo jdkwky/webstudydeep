@@ -13,6 +13,6 @@ let color = Color.Red;
 
 console.log(status1, 'status', color, 'color');
 
-status1 = Color.Red;
+// status1 = Color.Red;
 
 console.log(status1, 'status1');

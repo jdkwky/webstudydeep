@@ -86,7 +86,7 @@ window.onload = function () {
     })
 
     for (let i of obj) {
-        console.log(i);
+        console.log(i, ' iterator');
 
     }
 
