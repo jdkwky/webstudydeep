@@ -136,17 +136,17 @@
                 }
 
                 resolve = value => {
-                    this.status = _Promise.FULFILLED;
-                    this.value = value;
                     setTimeout(()=>{
+                        this.status = _Promise.FULFILLED;
+                        this.value = value;
                         this.handlers.forEach(this.runHandle);
                     },0)
                 };
 
                 reject = error => {
-                    this.status = _Promise.REJECTED;
-                    this.value = error;
                     setTimeout(()=>{
+                        this.status = _Promise.REJECTED;
+                        this.value = error;
                         this.handlers.forEach(this.runHandle);
                     },0)
                     
@@ -165,9 +165,12 @@
                         }
                     }
                     if (this.status == _Promise.REJECTED) {
-                        return reject(
-                            catchFn && catchFn.call(this, this.error)
-                        );
+                        const result = catchFn && catchFn.call(this, this.value);
+                        if( result instanceof _Promise){
+                            return result.then(val=>reject(val));
+                        }else{
+                            return reject(result || this.value)
+                        }
                     }
                 };
                 then = (successFn, catchFn) => {
@@ -182,25 +185,67 @@
                 };
             }
 
-            new _Promise((resolve, reject) => {
-                setTimeout(() => {
-                    resolve(2);
-                }, 2000);
-                // resolve(2);
-                
-            })
-                .then(value => {
-                    console.log(value)
-                    return new _Promise(resolve => {
-                        setTimeout(() => {
-                            resolve(3);
-                        }, 2000);
-                        // resolve(3);
-                    });
+            _Promise.all = function(list){
+                return new _Promise((resolve, reject)=>{
+                    let needIndex = 0;
+                    const resultList = [];
+                    for(let i =0, len = list.length; i < len ; i++){
+                        list[i].then(val =>{
+                            resultList[i] = val;
+                            needIndex++;
+                            if(needIndex == list.length){
+                                resolve(resultList)
+                            }
+                        },err =>{
+                            reject(err);
+                        })
+                    }
                 })
-                .then(value => {
-                    console.log(value);
-                });
+                
+            }
+
+
+            const _promiseArray = [
+                new _Promise(resolve => {
+                    setTimeout(() => {
+                        resolve(2);
+                    }, 2000);
+                }),
+                new _Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve(3);
+                    }, 500);
+                })
+            ];
+
+            _Promise.all(_promiseArray).then(value =>{
+                console.log(value, 'value');
+            },err=>{
+                console.log('all error', err);
+            })
+
+            // new _Promise((resolve, reject) => {
+            //     setTimeout(() => {
+            //         resolve(2);
+            //     }, 2000);
+            //     // resolve(2);
+                
+            // })
+            //     .then(value => {
+            //         console.log(value)
+            //         return new _Promise(resolve => {
+            //             setTimeout(() => {
+            //                 resolve(3);
+            //             }, 2000);
+            //             // resolve(3);
+            //         });
+            //     })
+            //     .then(value => {
+            //         console.log(value);
+            //         return 4
+            //     }).then(val =>{
+            //         console.log(val)
+            //     })
         </script>
     </body>
 </html>
