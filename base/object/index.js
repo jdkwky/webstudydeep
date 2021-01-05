@@ -237,12 +237,30 @@ window.onload = function () {
 
     }
 
+    // Object
+    var setObj1 = {
+        names:[],
+        age: 20,
+        set name (x){
+            return this.names.push(x);
+        },
+        get name (){
+            return this.names
+        }
+    }
+    setObj1.name = 'nihao';
+    console.log(setObj1.name, setObj1.names);
 
 
 
+    var freezeO  = Object.freeze(setObj1);
+    freezeO.names= [];
 
+    console.log(freezeO === setObj1);
 
+    freezeO.age = 30;
 
+    console.log(freezeO);
 
 
 }

@@ -1,4 +1,4 @@
-#### 对象和原型
+###### 对象和原型
 
 1. 存在性 (`in` 与 `hasOwnProperty`)
 ```
@@ -223,6 +223,59 @@
         }
     ```
 
+###### Object Es6中新增的方法
 
-Object.defineProperty()
+#
+
+1. set 不会给对象中新增属性
+
+```javascript
+var setObj1 = {
+     names:[],
+     set name (x){
+         return this.names.push(x);
+     },
+    //  get name (){
+    //      return this.names
+    //  }
+ }
+
+ console.log( setObj1.name ) // undefined set不会新增属性信息
+```
+
+2. Object.freeze 冻结对象
+
+> 被冻结的对象不能修改属性值，也不能删除属性，也不能修改属性的可读写性可枚举性等信息
+
+```javascript
+var setObj1 = {
+     names:[],
+     age: 20,
+     set name (x){
+         return this.names.push(x);
+     },
+     get name (){
+         return this.names
+     }
+ }
+ setObj1.name = 'nihao';
+ console.log(setObj1.name, setObj1.names);
+
+
+
+ var freezeO  = Object.freeze(setObj1);
+ freezeO.names= [];
+
+ console.log(freezeO === setObj1);
+
+ freezeO.age = 30;
+
+ console.log(freezeO);   // {names:[nihao], age: 20}  不能修改信息值 不会改变
+
+```
+
+
+3. Object.seal
+
+> 密封一个对象  可以修改属性值 但是不能删除或者新增属性
 
