@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面A打开页面B</title>
+</head>
+<body>
+    <script>
+        function test(){
+            window.open('./other.html','?page=otehr');
+        }
+        sessionStorage.setItem('pageName', 'index');
+        var pageValue = sessionStorage.getItem('pageName');
+    </script>
+    <button onclick="test()">
+        打开other标签
+    </button>
+
+    <a href="./other.html" target="_blank" rel="noopener">通过标签打开页面</a>
+    
+</body>
+</html>

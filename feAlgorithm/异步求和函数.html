@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>异步求和函数</title>
+</head>
+<body>
+    <!-- 
+        实现一个异步求和函数
+        提供一个异步add方法如下，需要实现一个await sum(...args)函数;
+     -->
+
+     <script>
+        function asyncAdd(a, b, callback) {
+            setTimeout(function () {
+                callback(null, a + b);
+            }, 1000);
+        }
+
+
+         var sum = async function (...args){
+            return await new Promise((resolve, reject)=>{
+                const args1 = args[0];
+                const args2 = args[1];
+                asyncAdd(args1, args2,(err, result)=>{
+                    if(!err){
+                        return resolve(result);
+                    }
+                    reject(err);
+                })
+            })
+        }
+        sum(2,3).then(res =>{
+            console.log(res, 'result');
+        });
+        
+        
+
+     </script>
+</body>
+</html>

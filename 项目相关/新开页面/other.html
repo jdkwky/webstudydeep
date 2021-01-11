@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Other 页面</title>
+</head>
+<body>
+    我是第二个页面
+
+    <button onclick="cancel()">取消</button>
+
+    <script>
+        function cancel(){
+            window.close();
+            window.opener.location.reload();
+            console.log(window.opener);
+        }
+        sessionStorage.setItem('pageName', 'other');
+
+        window.onbeforeunload = function(){
+            console.log('unload success');
+        }
+    </script>
+</body>
+</html>

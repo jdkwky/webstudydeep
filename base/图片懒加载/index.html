@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片懒加载</title>
+    <style>
+        img{
+            display: block;
+            height:  500px;
+            padding: 10px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 图片懒加载: window.innerHeight   el.getBoundingClientRect 返回元素相对于视口的高度 -->
+    <img  data-src="./image/a.jpeg" alt="" srcset="">
+    <img  data-src="./image/b.jpeg" alt="" srcset="">
+    <img  data-src="./image/c.jpeg" alt="" srcset="">
+    <img  data-src="./image/d.jpeg" alt="" srcset="">
+    <img  data-src="./image/e.jpeg" alt="" srcset="">
+    <img  data-src="./image/f.jpeg" alt="" srcset="">
+    <img  data-src="./image/g.jpeg" alt="" srcset="">
+    <img  data-src="./image/h.jpeg" alt="" srcset="">
+    <img  data-src="./image/i.jpeg" alt="" srcset="">
+    <img  data-src="./image/j.jpeg" alt="" srcset="">
+
+    <script>
+        // 获取视口高度
+        var height = window.innerHeight;
+        var imgs = document.querySelectorAll('img');
+        function isInView(el){
+            const rect = el && el.getBoundingClientRect();
+            // 判断元素是否在可视范围内
+            if(rect.top <0 && rect.bottom >0 && rect.bottom < height || rect.top> 0 && rect.top < height){
+                return true
+            }
+            return false;
+        }
+        // 加载图片信息
+        function showView(el){
+            var url = el.dataset.src;
+            if(!el.src){
+                el.src = url;
+            }
+        }
+        // 滚动检测
+       function check (){
+           console.log('in check');
+            imgs.forEach(img =>{
+                var flag = isInView(img);
+                if(flag){
+                    showView(img);
+                }
+            })
+       }
+       
+    //    函数防抖  和节流
+    /**
+     * 
+     *  防抖：在最后一次事件后出发函数
+     * 
+     *  节流： 不管函数执行多频繁  在规定时间内   一定会执行一次
+     * 
+     * 
+     * 
+     *
+     */
+    //    防抖
+       var debounce = (function(){
+            var time = null;
+            return function(fn,delay){
+                if(time){
+                    clearTimeout(time)
+                }
+                var _this = this;
+                time = setTimeout(function(){
+                    fn.apply(_this);
+                },delay);
+            }
+       })();
+
+    //    节流
+    var throttle = (function(){
+        var preTime = +new Date;
+        return function(fn, delay){
+            var nowTime = +new Date();
+            var _this = this;
+            if(nowTime - preTime > delay){
+                fn.call(_this);
+                preTime = nowTime;
+            }
+        }
+    })();
+
+        window.onload = function(){
+            check();
+        }
+        window.onscroll = function(){
+            throttle(check,1000);
+        }
+    </script>
+</body>
+</html>
