@@ -23,11 +23,53 @@
                 }
             }
         }
+        // var list = [2, 6, 1, 8, 2, 3, 5];
+        // rank1(list);
+
         var list = [2, 6, 1, 8, 2, 3, 5];
-        rank1(list);
+        // 快速排序
+        /**
+         *    中心思想： 二分
+         *    i j  两个哨兵 逐步已基准点为分界线将数据分成大于基准点的数据和小于基准点的数据
+         *     
+         *      [比基准点小的数据] 基准点 [比基准点大的数据]
+         * 
+         *      在对[比基准点小的数据] 选取基准点 哨兵 同上步骤进行递归操作
+         * 
+         * 
+         */
+        function fastRank(i, j){
+            const left = i ;
+            const right = j;
+            const temp = list[i];
+            if(left >= right){
+                return ;
+            }
+            while(j !=i){
+                while(list[j] >= temp && (j > i)){
+                    j--;
+                }
+                while(list[i] <= temp && (i < j)){
+                    i++;
+                }
+                
+                if(i < j){
+                    const t = list[i];
+                    list[i] = list[j];
+                    list[j] = t;
+                }
+            }
+            if(j == i){
+                list[left] = list[j];
+                list[j] = temp;
+            }
 
+            fastRank(left, j-1);
+            fastRank(j+1, right);
+        }
 
-
+        fastRank(0, list.length-1);
+        console.log(list, 'list');
 
     </script>
 </body>
