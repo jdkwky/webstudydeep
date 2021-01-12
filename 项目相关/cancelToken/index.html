@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>请求交叉发送</title>
+    </head>
+    <body>
+        <!--xhr抛弃请求 -->
+
+        <!-- <script>
+        const xhr = new XMLHttpRequest();
+        xhr.open('get','/server');
+        xhr.send();
+        
+        xhr.onabort = function(err){
+            console.log(err, 'abort')
+        }
+        xhr.abort();
+    </script> -->
+
+        <!--  -->
+
+        <!-- <script>
+
+        function CancelToken(){
+            var resolvePromise;
+            this.promise = new Promise(resolve =>{
+                resolvePromise = resolve
+            });
+        };
+
+        const c1 = new CancelToken();
+        const c2 = new CancelToken();
+
+        console.log(c1, c2, c1 == c2);
+    </script> -->
+
+        <script>
+            const controller = new AbortController();
+            const signal = controller.signal;
+            console.log(signal, 'signal的初始状态');
+            signal.addEventListener('abort', function(e) {
+                console.log(signal, 'signal的中断状态');
+            });
+
+            setTimeout(function() {
+                controller.abort();
+            }, 2000);
+            // 增加部分结束
+
+            fetch('/api', { signal }).then(res => {
+                console.log(res, '请求成功');
+            });
+        </script>
+    </body>
+</html>
