@@ -6,7 +6,8 @@
 > - __proto__指向 对象的原型（prototype）
 > - 更改this指向
 
-```
+
+```javascript
 function _new(fn, ...args) {
 
    if (Object.prototype.toString.call(fn) === '[object Function]') {
@@ -22,12 +23,66 @@ function _new(fn, ...args) {
 } 
 ```
 
-2. 实现一个JSON.stringify
+#
+关于this指向： 
+- 对象
+- 函数
+- 箭头函数
+
+```javascript
+var name = 'yc'
+var obj = {
+    name: 'wky',
+    test: function(){
+        console.log(this.name);
+    },
+    arrowTest: ()=>{
+        console.log(this.name);
+    }
+}
+
+obj.test(); // wky
+
+var testFn = obj.test;
+testFn(); // yc
+obj.arrowTest(); // yc
+
+
+
+function FN(){
+    console.log('i m Fn');
+}
+
+
+function initUse(FN){
+    FN.use = function(name){
+        //  this  指向FN函数
+        const list = (this.list || (this.list = []));
+        list.push(name);
+    }
+}
+
+
+initUse(FN);
+
+
+
+
+FN.use('wky');
+FN.use('yc');
+
+//  FN.list = [ 'wky', 'yc' ]
+
+
+```
+
+
+1. 实现一个JSON.stringify
 
 > - 不可转换数据： undefined、symbol、function
 > - 自动转换： String、 Number、Boolean、Date 自动转换成string类型
 
-```
+```javascript
 <!-- 判断是否是可转换数据 -->
 function changeText(params) {
    const regxIgnore = /undefined|symbol|function/;
@@ -124,8 +179,8 @@ function jsonStringify(params, index = 0) {
 
 > - call  param1: this指向， paramN: n个参数
 > - apply param1: this指向， param2: 数组参数
-
-```
+> - apply 传递进去的数组参数也会平铺并不是传递个数组参数
+```javascript
     Function.prototype._call = function (params) {
       const context = arguments[0];
       if (context) {
@@ -140,11 +195,24 @@ function jsonStringify(params, index = 0) {
     };
 
 ```
+```javascript
+function sum(num1, num2){
+    return num1 + num2 + 2;
+}
+
+function use(plugin){
+    const args = Array.prototype.slice.call(arguments, 1);
+    const result = plugin.apply(null, args)
+    console.log(result, 'result')
+}
+
+use(sum, 2, 3); // 7
+```
 
 4. 实现一个bind函数
 > - 返回一个改变this指向的函数
 
-```
+```javascript
 Function.prototype._bind = function () {
    var slice = Array.prototype.slice;
    var thatFunc = this, thatArg = arguments[0];
@@ -166,7 +234,7 @@ Function.prototype._bind = function () {
 
 > - 混合继承
 
-```
+```javascript
 function Parent() {
       this.colors = [];
       this.name = 'parent'
@@ -190,7 +258,7 @@ Sub.prototype = Object.create(Parent.prototype);
 
 > 什么是柯里化： 在计算机科学中，柯里化（Currying）是把接受多个参数的函数变换成接受一个单一参数(最初函数的第一个参数)的函数，并且返回接受余下的参数且返回结果的新函数的技术。
 
-```
+```javascript
 function curry(fn) {
    const length = fn.length;
    let args = [...arguments].slice(1);
@@ -207,7 +275,7 @@ function curry(fn) {
 
 7. 手写一个promise
 
-```
+```javascript
 function _Promise(fn) {
    this.fulfilled = 1;
    this.rejected = 2;
@@ -299,7 +367,7 @@ _Promise.prototype.then = function (onFulfilled, onRejected) {
 > 防抖： 触发高频事件后 n 秒内只会执行一次，如果n秒内高频事件再次被触发，则重新计算时间
 > 节流： 高频事件n秒内只会触发一次，所以节流会稀释函数的执行频率
 
-```
+```javascript
 <!-- 防抖 -->
 function debouncing(fn, delayMs) {
    let time = null;
@@ -314,7 +382,7 @@ function debouncing(fn, delayMs) {
 }
 ```
 
-```
+```javascript
 <!-- 节流 -->
 function throttling(fn, ms) {
    let flag = false;
@@ -339,7 +407,7 @@ function throttling(fn, ms) {
 
 9. 手写一个js深拷贝
 
-```
+```javascript
  function deepCopy(obj) {
       if (typeof obj == "object") {
           var result = Object.prototype.toString.call(obj) === '[object Array]' ? [] : {};
@@ -357,7 +425,7 @@ function throttling(fn, ms) {
 10. 实现一个instanceOf
 > 注意： 只是示例， 一些参数的特定校验规则并没有写在里面
 
-```
+```javascript
 function _instanceof(l, r) {
     var o = r.prototype;
     l = l.__proto__;
@@ -387,7 +455,7 @@ function _instanceof(l, r) {
 - undefined：用 - （−2^30）表示。
 - null：对应机器码的 NULL 指针，一般是全零。
 
-```
+```C++
 if (JSVAL_IS_VOID(v)) {  // (1)
     type = JSTYPE_VOID;
 } else if (JSVAL_IS_OBJECT(v)) {  // (2)
@@ -420,7 +488,7 @@ if (JSVAL_IS_VOID(v)) {  // (1)
 
 12. 实现一个co模块
 
-```
+```javascript
 function co(genenratorFn) {
     var gen = genenratorFn();
     var it = gen.next();

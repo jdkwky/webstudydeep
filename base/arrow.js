@@ -108,3 +108,68 @@ a.sayArrowHello();
 
 a.sayHello.call({ name: 'obj Arrow' });
 a.sayArrowHello.call({ name: 'obj Arrow' });
+
+
+
+
+
+// this 指向
+function FN(){
+    console.log('i m Fn');
+}
+
+
+function initUse(FN){
+    FN.use = function(name){
+        const list = (this.list || (this.list = []));
+        list.push(name);
+    }
+}
+
+
+initUse(FN);
+
+
+
+
+FN.use('wky');
+FN.use('yc');
+
+
+// apply 参数
+
+function sum(num1, num2){
+    return num1 + num2 + 2;
+}
+
+
+function use(plugin){
+    const args = Array.prototype.slice.call(arguments, 1);
+    const result = plugin.apply(null, [4,5])
+    console.log(result, 'result')
+}
+
+
+use(sum, 2, 3);
+
+
+var name = 'yc'
+var obj = {
+    name: 'wky',
+    test: function(){
+        console.log(this.name);
+    },
+    arrowTest: ()=>{
+        console.log(this.name);
+    }
+}
+
+obj.test(); // wky
+
+var testFn = obj.test;
+testFn()// yc
+obj.arrowTest() // yc
+
+
+
+

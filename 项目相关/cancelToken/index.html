@@ -36,7 +36,7 @@
         console.log(c1, c2, c1 == c2);
     </script> -->
 
-        <script>
+        <!-- <script>
             const controller = new AbortController();
             const signal = controller.signal;
             console.log(signal, 'signal的初始状态');
@@ -52,6 +52,21 @@
             fetch('/api', { signal }).then(res => {
                 console.log(res, '请求成功');
             });
+        </script> -->
+
+        <script>
+            var list = [
+                { obj: { persons: [{ age: 3.64442323 }] } },
+                { obj: { persons: [{ age: 3.454545454 }] } }
+            ];
+            list.sort((val1, val2) => {
+                const obj1 = val1.obj.persons;
+                const obj2 = val2.obj.persons;
+                const age1 = obj1[0];
+                const age2 = obj2[0];
+                return age1.age - age2.age;
+            });
+            console.log(list, 'list');
         </script>
     </body>
 </html>
