@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    字符串仅由小写字母和 [] 组成，且字符串不会包含多余的空格。
+示例一: 'abc' --> {value: 'abc'}
+示例二：'[abc[bcd[def]]]' --> {value: 'abc', children: {value: 'bcd', children: {value: 'def'}}}
+
+    <script>
+
+        function parse(str){
+            const list = str.split(/(\[|\])/).filter(val =>val);
+            let result = null;
+            let temp = null;
+            for(let i = 0, len = list.length; i< len; i++){
+                const value = list[i];
+                if(value == ']'){
+                    break;
+                }
+                
+                switch(value){
+                    case '[':
+                      if(result){
+                          result = (result.children || (result.children = {}));
+                      }else{
+                          result = temp =  {};
+                      }
+                      break;
+                      default: 
+                        if(result){
+                            result.value = value;
+                        }else{
+                            result = temp =  { value: value};
+                        }
+                        break;
+                }
+                
+            }
+            return temp;
+
+        }
+        const str = '[abc[bcd[def]]]';
+        console.log(parse(str));
+        console.log(parse('abc'));
+    </script>
+
+
+
+</body>
+</html>

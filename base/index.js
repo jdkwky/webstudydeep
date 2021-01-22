@@ -1,3 +1,4 @@
+
 function jsonStringify(params, index = 0) {
     const regxIgnore = /undefined|symbol|function/;
     const regxString = /string|boolean|number/;
@@ -90,8 +91,8 @@ function test2() {
     bar();
 }
 
-test1();
-test2();
+// test1();
+// test2();
 
 // console.log(+new Date)
 // window.requestAnimationFrame(function(){
@@ -126,3 +127,18 @@ function formatSetInterval(fn, time) {
 //         console.log(+new Date, 'setInterval');
 //     });
 // }, 1000);
+
+
+// 立即执行函数
+
+var a = 10;
+(function(){
+    console.log(a);
+    a = 5;
+    console.log(a);
+    console.log(window.a);
+    var a = 20;
+    // 向上提升
+    console.log(a);
+})()
+

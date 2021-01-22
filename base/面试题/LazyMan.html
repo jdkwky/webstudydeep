@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LazyMan</title>
+</head>
+<body>
+    <!-- 
+        LazyMan('Tony')  // Hi I am Tony
+
+        LazyMan('Tony').sleep(10).eat('lunch');  
+        // Hi I am Tony 
+        // 等待了10秒
+        // I am eating lunch 
+
+        LazyMan('Tony').eat('lunch').sleep(10).eat('dinner');
+        // Hi I am Tony 
+        // I am eating lunch 
+        // 等待了10秒
+        // I am eating dinner
+
+        LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(10).eat('junk food');
+        // Hi I am Tony 
+        // 等待了 5秒
+        // I am eating lunch 
+        // I am eating dinner
+        // 等待了10秒
+        // I am eating junk food
+     -->
+
+
+     <script>
+        function LazyMan(name){
+            return new _LazyMan(name);
+        }
+
+        function _LazyMan(name){
+            this.fnList = [];
+            console.log(`Hi I am ${name}`);
+            setTimeout(()=>{
+                if(this.fnList.length > 0){
+                    const [first] = this.fnList.slice(0,1);
+                    const others  = this.fnList.slice(1);
+                    others.reduce((pre, next) =>{
+                        if(pre instanceof Promise){
+                           return pre.then(()=>next());
+                        }else{
+                            return next();
+                        }
+                    }, first())
+                }
+
+            },0)
+        }
+
+        _LazyMan.prototype.eat = function(name){
+            this.fnList.push(()=>{
+                console.log(`I am eating ${name}`)
+            });
+            return this;
+        }
+
+
+        _LazyMan.prototype.sleep = function(time){
+            const p = new Promise(resolve =>{
+                setTimeout(()=>{
+                    console.log(`等待了${time}ms`);
+                    resolve();
+                }, time);
+            });
+            this.fnList.push(()=>p);
+            return this;
+        }
+
+
+        _LazyMan.prototype.sleepFirst = function(time){
+            const p = new Promise(resolve =>{
+                setTimeout(()=>{
+                    console.log(`等待了${time}ms`);
+                    resolve();
+                }, time);
+            });
+            this.fnList.unshift(()=>p);
+            return this;
+        }
+
+
+        // LazyMan('Tony');
+        // LazyMan('Tony').sleep(1000).eat('lunch');  
+
+        // LazyMan('Tony').eat('lunch').sleep(10).eat('dinner');
+
+        // LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(10).eat('junk food');
+    
+        LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(1000).sleep(2000).eat('junk food')
+
+
+     </script>
+</body>
+</html>
