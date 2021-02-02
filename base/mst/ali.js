@@ -109,3 +109,57 @@ console.log(parseStrToCamelCase('_person'));
  * 如果是，则不做任何处理；如果不是，则 console.warn 输出 非 https 链接。
  */
 
+
+ /**
+  * 
+  * <html>
+  * <head></head>
+  * <body>
+        <div>
+        <span>f</span>
+        <span>o</span>
+        <span>o</span>
+        </div>
+    </body>
+    </html>
+    会输出：
+
+    {
+    totalElementsCount: 7,
+    maxDOMTreeDepth: 4,
+    maxChildrenCount: 3
+    }
+*/
+
+
+
+function getDomInfo(){
+    let totalElementsSet = new Set();
+    totalElementsSet.add('html');
+    let maxDOMTreeDepth = 0;
+    const htmlNode = document.querySelector('html');
+    function getChildren(node,tag){
+        const children = node &&  node.childNodes ||[];
+        const childrenList =  Array.prototype.slice.call(children,0);
+        if(childrenList.length > 0){
+            childrenList.forEach(child => {
+                totalElementsSet.add(node.tagName);
+                if(node.tagName=='BODY'){
+                    maxDOMTreeDepth +=1;
+                    getChildren(child,'body');
+                }else{
+                    getChildren(child, tag);
+                }
+            });
+        }
+    }
+    getChildren(htmlNode);
+    return {
+        totalElementsCount: totalElementsSet.size,
+        maxDOMTreeDepth,
+        maxChildrenCount:maxDOMTreeDepth-1
+    }
+}
+
+const domResult = getDomInfo();
+console.log(domResult,'domResult');

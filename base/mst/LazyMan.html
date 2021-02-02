@@ -30,7 +30,7 @@
      -->
 
 
-     <script>
+     <!-- <script>
         function LazyMan(name){
             return new _LazyMan(name);
         }
@@ -96,6 +96,62 @@
         LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(1000).sleep(2000).eat('junk food')
 
 
+     </script> -->
+
+     <script>
+         class _LazyMan{
+             constructor(name){
+                console.log(`Hi I am ${name}`);
+                this.tasks = [];
+                setTimeout(()=>{
+                    this.next();
+                },0)
+             }
+
+             next =() =>{
+                 const task = this.tasks.shift();
+                 task && task();
+             }
+
+             eat =(name) =>{
+                 const task = ()=>{
+                    console.log(`I am eating ${name}`);
+                    this.next();
+                 }
+                 this.tasks.push(task);
+                 return this;
+             }
+             delayFn = (delayms, isFirst) =>{
+                const task = ()=>{
+                    setTimeout(()=>{
+                        console.log(`等待了 ${delayms}ms`);
+                        this.next();
+                    }, delayms)
+                };
+                if(isFirst){
+                    this.tasks.unshift(task);
+                }else{
+                    this.tasks.push(task);
+                }
+             }
+             sleepFirst =(ms) =>{
+                this.delayFn(ms, true);
+                return this;
+             }
+             sleep =(ms) =>{
+                this.delayFn(ms, false);
+                return this;
+             }
+         }
+
+         function LazyMan(name){
+             return new _LazyMan(name);
+         }
+
+        //  LazyMan('Tony');
+        // LazyMan('Tony').sleep(1000).eat('lunch');  
+        // LazyMan('Tony').eat('lunch').sleep(10).eat('dinner');
+        LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(10).eat('junk food');
      </script>
 </body>
 </html>

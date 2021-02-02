@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 禁止用户缩放 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+    <!-- cache-Control 缓存相关 浏览器缓存-->
+    <!-- 禁止缓存 -->
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <title>移动端HTML基础</title>
+    <style>
+        input + input{
+            margin-top: 10px;
+        }
+        /* css 方向 */
+        html{
+            /* font-size: calc( 100vw / 7.5 ); */
+            /* font-size: 80px; */
+        }
+        body{
+            /* 安卓系统上支持弹性滚动 */
+            -webkit-overflow-scrolling: touch;
+        }
+        /* 使用媒体查询监听屏幕旋转 */
+        /* 横屏 */
+        @media all and (orientation: landscape) {
+            /* 自定义样式 */
+            html{
+                font-size: 80px;
+            }
+        }
+        /* 竖屏 */
+        @media all and (orientation: portrait) {
+            /* 自定义样式 */
+            html{
+                font-size: 20px;
+            }
+        }
+
+        .can-scroll{
+            height: 800px;
+            overflow: auto;
+            /* 禁止后面元素跟着一起滚动传播 */
+            overscroll-behavior: contain;
+        }
+        .elem {
+            position: relative;
+            width: 200px;
+            height: 80px;
+            
+        }
+        .elem::after {
+            position: absolute;
+            left: 0;
+            top: 0;
+            border: 1px solid #f66;
+            width: 200%;
+            height: 200%;
+            content: "";
+            transform: scale(.5);
+            transform-origin: left top;
+        }
+        /* 关于em 和rem */
+        /* em  是相对于父元素的取值 */
+        .em-parent{
+            font-size: 120px;
+        }
+        .em-sub{
+            font-size: 2em;
+        }
+
+        .rem-parent{
+            font-size: 80px;
+        }
+        /* rem 不是相对于父元素的取值  是相对于根元素的取值 */
+        .rem-sub{
+            font-size: 2rem;
+        }
+
+    </style>
+</head>
+<body>
+    <input type="tel" />
+    <input type="number" pattern="\d*" />
+
+    <a href="weixin://">打开微信</a>
+
+    <div class="can-scroll">
+        我是滚动的
+    </div>
+    <div class="elem">
+        我是elem
+    </div>
+    <div class="em-parent">
+        我是父 em
+        <div class="em-sub">
+            我是子 em
+        </div>
+    </div>
+    <div class="rem-parent">
+        我是父 rem
+        <div class="rem-sub">
+            我是子 rem
+        </div>
+    </div>
+</body>
+</html>

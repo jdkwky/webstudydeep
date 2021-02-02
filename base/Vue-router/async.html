@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue-router 异步执行函数</title>
+</head>
+<body>
+    <script>
+        function runQueue(queue, fn){
+            const step = index =>{
+                if(index >= queue.length){
+                    return;
+                }else{
+                    fn(queue[index], ()=>{
+                        step(index +1)
+                    })
+                }
+            }
+            step(0);
+        }
+
+
+        const queue = [
+            new Promise((resolve, reject)=>{
+                setTimeout(()=>{
+                    resolve('async');
+                },2000)
+            }),
+            {
+                then(fn){
+                    fn('sync function')
+                }
+            }
+        ];
+
+
+        const fn = function (obj, next){
+            obj.then(res=>{
+                console.log(res, 'fn');
+                next();
+            })
+        }
+
+        runQueue(queue, fn);
+
+
+    </script>
+</body>
+</html>

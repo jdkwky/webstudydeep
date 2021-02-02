@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const uses = [];
+        function use(fn){
+            uses.push(fn);
+        }
+
+        function next(){
+            const useFn = uses.shift();
+            useFn && useFn(null, next);
+        }
+
+        function test(){
+            next();
+        }
+
+        use((ctx,next)=>{
+            console.log('我是同步的1');
+            next();
+            console.log('我是同步的2');
+        });
+        // use((ctx,next)=>{
+        //    setTimeout(()=>{
+        //         console.log('我是异步的');
+        //         next();
+        //    },1000)
+        // });
+        use((ctx,next)=>{
+            console.log('我还是同步的');
+            next();
+        });
+
+        test();
+
+
+    </script>
+</body>
+</html>
