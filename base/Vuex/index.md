@@ -38,5 +38,6 @@
   
 
 - new Store
-
-  
+  - 递归查找父子模块关系，父module和 子module对应关系
+  - install module  将各个module中的mutations、actions等注册
+  - 将state 和getters 中的数据放到new Vue({ data: $$state, computed:computed })中

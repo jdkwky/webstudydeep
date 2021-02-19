@@ -136,28 +136,43 @@ console.log(parseStrToCamelCase('_person'));
 function getDomInfo(){
     let totalElementsSet = new Set();
     totalElementsSet.add('html');
-    let maxDOMTreeDepth = 0;
+    // var maxDOMTreeDepth = 0;
+    const deepList = [];
     const htmlNode = document.querySelector('html');
-    function getChildren(node,tag){
+    function getChildren(node,tag, deep){
         const children = node &&  node.childNodes ||[];
         const childrenList =  Array.prototype.slice.call(children,0);
+        if(tag=='body'&& deep){
+            deep = deep +1;
+        }
         if(childrenList.length > 0){
+            console.log(childrenList, 'childrenList', tag)
             childrenList.forEach(child => {
                 totalElementsSet.add(node.tagName);
-                if(node.tagName=='BODY'){
-                    maxDOMTreeDepth +=1;
-                    getChildren(child,'body');
+                if(node.tagName==='BODY'){
+                    deep = 1;
+                    const result = getChildren(child,'body',deep);
+                    if(result){
+                        deepList.push(result);
+                    }
                 }else{
-                    getChildren(child, tag);
+                    const result =  getChildren(child, tag, deep);
+                    if(result){
+                        deepList.push(result);
+                    }
                 }
             });
         }
+        return deep;
     }
-    getChildren(htmlNode);
+    
+    getChildren(htmlNode,'');
+    // console.log(maxDOMTreeDepth, 'maxDOMTreeDepth');
+    const maxDom = deepList.sort((val1, val2)=> val2 - val1)[0];
     return {
         totalElementsCount: totalElementsSet.size,
-        maxDOMTreeDepth,
-        maxChildrenCount:maxDOMTreeDepth-1
+        maxDOMTreeDepth: maxDom,
+        maxChildrenCount:maxDom-1
     }
 }
 
