@@ -68,9 +68,9 @@
      *
      */
     //    防抖
-       var debounce = (function(){
+       var debounce = (function(fn,delay){
             var time = null;
-            return function(fn,delay){
+            return function(){
                 if(time){
                     clearTimeout(time)
                 }
@@ -82,9 +82,9 @@
        })();
 
     //    节流
-    var throttle = (function(){
+    var throttle = (function(fn, delay){
         var preTime = +new Date;
-        return function(fn, delay){
+        return function(){
             var nowTime = +new Date();
             var _this = this;
             if(nowTime - preTime > delay){

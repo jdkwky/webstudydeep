@@ -7,11 +7,244 @@
 </head>
 <body>
     <script>
-        var a = 1;
-        console.log(window.a);
+        // var a = 1;
+        // console.log(window.a);
+        // 
+
+        //  script start , async1 start ,  async2, promise1, script end,   async1 end , promise2,  setTimeout
+
+        async function async1() {
+            console.log('async1 start');
+            await async2();
+            console.log('async1 end');
+        }
+        async function async2() {
+            console.log('async2');
+        }
+        console.log('script start');
+        setTimeout(function() {
+            console.log('setTimeout');
+        }, 0)
+        async1();
+        new Promise(function(resolve) {
+            console.log('promise1');
+            resolve();
+        }).then(function() {
+            console.log('promise2');
+        });
+        console.log('script end');
 
 
+
+        // async await  是  promise generator的语法糖
+
+
+        function co(genFn){
+            const gn = genFn();
+            let it = gn.next();
+            return new Promise((resolve, reject) =>{
+                const next = function(){
+                    if(it.done){
+                        resolve(it.done);
+                    }else{
+                        it.value = Promise.resolve(it.value);
+                        it.value.then(result =>{
+                            it = gn.next(result);
+                            next();
+                        });
+                        it.value.catch(err=>{
+                            reject(err);
+                        })
+                    }
+
+                }
+
+                next();
+            })
+        }
+
+
+        // 
+
+        // new 的本质是创建新对象， 改变__prop__指向
+        Function.prototype.a = 'a';
+        Object.prototype.b = 'b';
+        function Person(){};
+        var p = new Person();
+        console.log('p.a: '+ p.a, p); // p.a: undefined
+        console.log('p.b: '+ p.b); // p.b: b
+
+
+
+        function _new(fn, ...args) {
+
+            if (Object.prototype.toString.call(fn) === '[object Function]') {
+                const obj = {};
+                obj.__proto__ = fn.prototype;
+                const result = fn.apply(obj, args);
+                if (result) {
+                    return result;
+                }
+                return obj;
+            }
+            throw ('fn is need to be function')
+        }
+
+        const p1 = _new(Person);
     
+
+        // 实现vue 的 $emit $on $once $off
+        function Emitter(){
+            this.events = {};
+        }
+
+        Emitter.prototype.$on = function(event, fn){
+            if(Array.isArray(event)){
+                event.forEach(e =>{
+                    this.$on(e, fn)
+                })
+            }else{
+                (this.events[event] || (this.events[event] = [])).push(fn);
+            }
+            return this;
+        }
+
+
+        Emitter.prototype.$once = function(event, fn){
+            function on(){
+                this.$off(event, fn);
+                fn.apply(this, arguments)
+            }
+
+            on.fn = fn ;
+            this.$on(event, on);
+            return this;
+        }
+        
+
+        Emitter.prototype.$off = function(event, fn){
+            if(arguments.length == 0){
+                // 全部清空
+                this.events = {};
+                return this;
+            }
+            if(Array.isArray(event)){
+                event.forEach(e =>{
+                    this.$off(e, fn)
+                })
+
+                return this;
+            }
+
+            if(!fn){
+                this.events[event] = null;
+                return this;
+            }
+
+            if(fn){
+                const fns = this.events[event];
+                let index = fns.length;
+                while(index--){
+                    if(fns[index] === fn){
+                        fns.splice(index,1);
+                        index--;
+                    }
+                }
+                return this;
+            }
+
+
+        }
+
+        Emitter.prototype.$emit = function(event, ...args){
+            const fns = this.events[event];
+            if(fns){
+                fns.forEach(fn=>{
+                    fn.apply(this, args)
+                })
+            }
+        }
+
+
+        // var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];
+
+
+
+        var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];
+
+
+        function flat(arr){
+            if(Array.isArray(arr)){
+                return arr.flat(Infinity).sort((val1, val2)=>val1 - val2);
+            }
+            return null;
+        }
+
+
+        console.log(flat(arr), 'flat arr')
+
+
+
+        // add(1); 			// 1
+        // add(1)(2);  	// 3
+        // add(1)(2)(3)；// 6
+        // add(1)(2, 3); // 6
+        // add(1, 2)(3); // 6
+        // add(1, 2, 3); // 6
+
+
+
+
+        function add (...args) {
+            let s = args.reduce((v1,v2)=> v1 + v2,0);
+            
+            function sum(...sumArgs){
+                s +=sumArgs.reduce((v1,v2)=> v1 + v2,0);
+                return sum;
+            }
+
+            sum.toString =  function(){
+                return s;
+            }
+
+            return sum;
+            
+        }
+
+        console.log(add(1),add(1)(2)(3),add(1)(2, 3) );
+
+
+
+        let list =[
+            {id:1,name:'部门A',parentId:0},
+            {id:2,name:'部门B',parentId:0},
+            {id:3,name:'部门C',parentId:1},
+            {id:4,name:'部门D',parentId:1},
+            {id:5,name:'部门E',parentId:2},
+            {id:6,name:'部门F',parentId:3},
+            {id:7,name:'部门G',parentId:2},
+            {id:8,name:'部门H',parentId:4}
+        ];
+
+        // 将上述list结构转换成tree结构
+        const topTree = []
+        function convert(list, children, targetId){
+            for(let i = 0 ; i< list.length; i++){
+                if(targetId == list[i].parentId){
+                    const temp = list.splice(i,1)[0];
+                    temp.children = [];
+                    children.push(temp);
+                    i--;
+                    convert(list,temp.children, temp.id); 
+                }
+            }
+        }
+
+        convert(list, topTree,0)
+        console.log(topTree,'topTree')
+
+
+
     </script>
 </body>
 </html>

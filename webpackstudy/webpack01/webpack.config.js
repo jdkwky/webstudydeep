@@ -21,6 +21,7 @@ module.exports = {
             //     console.error('test minimizer ');
             // }
         ],
+        // 拆分代码
         splitChunks: {
             cacheGroups: {
                 common: {
