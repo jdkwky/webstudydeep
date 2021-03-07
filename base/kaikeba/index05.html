@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 
+        1.有没有写过 Koa 中间件，说下中 间件原理，介绍下自己写过的中间件?
+        2.如何判断当前脚本运行在浏览器还是node环境中？
+        3.请描述一下 cookies sessionStorage和localstorage区别？
+     -->
+
+     <!-- 
+         
+      -->
+
+      <script>
+            // 没有写过中间件  中间件原理就是将异步函数依次调用，洋葱圈模型
+            const fnList = [];
+            function use(fn){
+                fnList.push(fn);
+            }
+
+            const next = ()=>{
+                const current = fnList.shift();
+                current && current(next);
+            }
+
+            use((next)=>{
+                console.log('first 1');
+                next();
+            });
+            use(next=>{
+                setTimeout(()=>{
+                    console.log('first 2');
+                    next();
+                },1000);
+            });
+            use(next=>{
+                setTimeout(()=>{
+                    console.log('first 3');
+                    next();
+                },100);
+            });
+            next();
+
+            // 2. this===window 如果是true 则表示浏览器环境  否则为node 环境
+            // 3. 相同点: 都能存储用户信息， 并且都具有同源策略
+            //    不同点: cookie能被服务端种下，sessionStorage 和localStorage 不能
+            //           cookie存储信息有大小限制 最大 4kb，能设置过期时间
+            //           sessionStorage 和 localStorage 存储空间比较大  有 4MB,
+            //           sessionStorage 在页签关闭时会自动消失
+            //           localStorage 不会自动消失
+            //           当同域条件下的两个页面如果更改 storage信息时能通过监听window 上的Storage事件判断 storage信息是否被更改
+      </script>
+
+
+<!-- 附加题 -->
+<!-- 
+    1、 hooks 不能再条件判断语句中使用，可能会造成数据信息的不准确
+    2、 setState 是同步还是异步 要具体情况具体分析，如果setState事件在同一个事物中被执行 那就是异步执行的，react会进行批量处理，会导致数据丢失，避免这种情况发生最好是使用setState函数形式，如果在不同事物中执行就是同步的
+ -->
+
+ <script>
+     
+ </script>
+
+</body>
+</html>

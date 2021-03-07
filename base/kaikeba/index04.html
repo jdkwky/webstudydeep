@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 
+        1. Vue 生命周期
+        beforeCreate: 没有this指向
+        created： 存在this指向，初始化data props methods computed watch
+        beforeMount: 完成页面元素渲染之前调用
+        mounted: 页面元素渲染完成
+        beforeUpdate: 组件更新之前调用
+        updated： 组件更新完毕
+        beforeDestory: 组件销毁之前调用
+        destoryed: 组件销毁后调用
+
+        2. Vue 中 computed 和watch的区别
+        computed: 是惰性watch，会缓存数据结果，如果数据没有改变则直接返回cache里的数据值，
+                  并且如果computed值没有被使用是不会进行依赖收集的
+        watch:  watch 如果检测的数据变动一定会执行watch的cb函数，
+                watch 支持深度监听 deep:true 和回调函数立即执行配置 immediate: true
+                如果$watch中的监听数据是个函数并返回了依赖其他数据的数据，就相当于监听了一个没有
+                定义的computed数据
+     -->
+
+
+
+
+</body>
+</html>

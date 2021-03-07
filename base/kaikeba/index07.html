@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 
+        1、v-if和v-for为什么不能连用？
+        2、单页面应用和多页面应用区别及优缺点?
+        3、v-model 该如何实现？
+     -->
+
+     <!-- 
+         1.  v-for 的优先级比v-if高， 如果连用的话会造成不必要的计算，影响性能
+         2.  单页面应用 和 多页面应用：
+             区别: 单页面应用只有一个html文件 多页面应用会有多个html应用 多个入口
+             优缺点： 单页面应用入口单一，方便维护
+         3. v-model: props定义属性，model定义关联的属性和事件
+            model: {
+                prop: 'value',
+                event: 'change'
+            },
+            props: {
+                value: {
+                    type: Object,
+                    default: () => ({})
+                }
+            },
+      -->
+
+      <!-- 
+        1. 什么是HoC（Higher-Order Component）？适用于什么场景？
+
+            高阶组件 React 中用于复用组件逻辑的一种高级技巧。高阶组件参数为组件，返回值为新组件的函数。
+            适用于什么场景： 组件功能大体相似可能根据不同数据驱动，这时候可以考虑使用高阶组件
+
+        2. 什么时候应该选择用class实现一个组件，什么时候应该用一个函数实现一个组件？
+            组件内部需要有状态，有生命周期控制的组件用class 实现， 纯展示作用的组件用函数实现。
+            
+        3. 你喜欢React Stateless组件吗？为什么？（发散题目 ）
+                   
+       -->
+</body>
+</html>

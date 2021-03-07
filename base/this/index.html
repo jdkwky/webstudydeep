@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+</head>
+<body>
+    <script>
+
+        // LHS  RHS 
+        // 当变量出现在赋值操作左边时会进行LHS查询，出现在右侧时会出现RHS查询
+        // 第一次对b进行RHS查询是无法找到该变量的，在其相关作用域中也是查询不到相关变量的，这时RHS查询就会抛出ReferrenceError异常错误
+        function foo(a){
+            console.log(a + b);
+        }
+
+        // foo(1);
+        // 当引擎在执行LHS时，如果再顶级作用域中也没有找到变量，“全局作用域”中就会创建一个具有该名称的变量，前提是在非严格模式下
+        function foo2(a){
+            b = a + 1;
+            console.log(b);
+        }
+        foo2(1);
+        console.log(b);
+
+        // 箭头函数的this指向是词法的，即根据外层作用域来决定this指向
+
+        var name = 'top'
+        const foo3 = function(){
+            return ()=>{
+                console.log(this.name, 'arrow this name');
+            }
+        }
+
+        const obj = {
+            name: 'obj',
+            foo3: foo3()
+        }
+
+
+        obj.foo3();
+
+
+        
+
+        
+
+
+    </script>
+</body>
+</html>

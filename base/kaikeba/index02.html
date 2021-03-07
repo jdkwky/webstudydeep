@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 
+        1. 如何中断ajax请求
+        2. 什么是同步？什么是异步？
+        3. 什么是宏任务？什么是微任务？
+     -->
+
+
+    <!-- 
+        1.  调用 XMLHttpRequest 对象的abort方法 抛弃当前请求
+            断开网络
+
+        2.  同步： 按顺序执行,同步任务执行顺序是一定的，是线性的
+            异步： 不按顺序执行，异步任务执行顺序是不一定的，是发散的
+
+        3.  宏任务：异步任务，如果当前任务队列没有执行完毕，
+                   宏任务会被放置到新的任务队列中，直到上一个任务队列执行完毕才会执行宏任务所在的任务队列
+
+            微任务：异步任务，微任务不会被放置到新的任务队列中而是在当前任务队列中的最后任务后挂载新队列，
+                   当前任务队列执行完毕后会先执行微任务队列然后再去执行宏任务队列
+     -->
+
+     <!-- 附加题 -->
+     <!-- 
+        1、js中基础数据类型有哪几种?了解包装对象么？
+        2、如何判断this？箭头函数的this是什么？
+      -->
+      <!-- 
+          1. number string null undefined  boolean symbol,包装对象即 number string boolean的对象形势 Number String Boolean
+          2. 默认this指向指向window，但是可以通过 new bind call apply 对象调用等方式改变this指向；
+            箭头函数的this指向是词法的，根据外层作用域调用决定this指向，箭头函数的this指向不能被call bind apply所修改
+       -->
+
+
+
+</body>
+</html>

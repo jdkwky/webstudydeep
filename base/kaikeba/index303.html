@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 
+        1、mixin 和 mixins 区别？
+        2、vue2中为什么检测不到数组的 变化，如何解决?
+     -->
+
+     <!-- 
+         1. mixin是一种技术，是降多个对象融合成一个对象的方法， mixins 是vue中的一个融合功能，能将多个写有生命周期钩子、方法、数据、属性、计算属性等融合的钩子函数。
+         2. vue2 中使用 object.defineProtety劫持对象和数组， 如果通过数组下标形式或者通过push、unshift、splice、shift、pop等方法改变数组时是不会触发set的，但是Vue2 中通过对数组中上述方法的重写，如果是添加数据则将新添加的数据observe并通知dep对象进行视图更新，如果是删除数据的方法则直接通知dep对象进行更新操作，如果是想通过改变下标的方式更新数组则需要调用$set方法$set(list,index, updateData)
+      -->
+
+
+      <!-- 
+        1、在 React 项目中，想要进行逻辑复用,有哪些方案？
+        2、在 React 中，针对类组件 和 函数组件，分别怎么去进行性能优化？
+        3、请结合 React Router 实现 React 项目的路由守卫。
+       -->
+       <!-- 
+           1.  组件，高阶组件，公共方法
+           2.  不太清楚
+           3.  不太清楚
+        -->
+
+
+
+
+        <script>
+            // object.defineProperty 特性
+
+            function defineProperty(info, key){
+                let val = info[key];
+                Object.defineProperty(info, key, {
+                    get () {
+                        console.log('get', val);
+                        return val;
+                    },
+                    set (value) {
+                        val = value;
+                        console.log('set', val);
+                    }
+                });
+            }
+            // const info = {
+            //     list: []
+            // };
+            // defineProperty(info,'list');
+            // info.list[0] = 1;
+            // info.list[0] = 2;
+            // info.list[1] = 3;
+            // info.list[4] = 4;
+            // info.list[6] = 6;
+            // list[0];
+            // list[0] = 1;
+            // info.list.push(1);
+           
+            // console.log(list, 'list');
+
+            const info = {};
+            // defineProperty(list,'0');
+            // list[0] = 2;
+
+            defineProperty(info, 'key');
+            info.key= '11';
+            info.test = '22';
+            // info.list = [];
+            // info.list[0] = 1;
+            // info.list[1] = 2;
+            
+
+            // const obj = { name: 'test' };
+            // defineProperty(obj, 'name');
+            // obj.name 
+            // obj.name ='hehe';
+            // console.log(obj, 'obj');
+
+
+            const validator = {
+                set: function(obj, prop, value) {
+                    console.log(' in set catch');
+                    return Reflect.set(obj, prop, value);
+                },
+                get: function(obj, prop, value){
+                    console.log('in get catch',value);
+                    if(typeof value == 'object'){
+                        return new Proxy(value, validator);
+                    }
+                    return Reflect.get(obj,prop,value)
+                }
+            };
+
+            // const obj = new Proxy({}, validator);
+            // obj.a = { a: 'name' };  // // 输出  ’in set catch‘
+            // obj.a.a = 'test';  // 输出 in get catch
+            // console.log(obj);
+        </script>
+</body>
+</html>

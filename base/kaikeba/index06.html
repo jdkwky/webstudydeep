@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 
+        1、节流和防抖分别是什么？在什么场景下使用？请分别实现一个节流函数和一个防抖函数
+
+        
+
+        2、有一个输入框，假设用户需要搜索字符串“123”，但是为了友好体验，当用户输入“1“的时候显示“1“的联想词汇“12”然后做视图渲染，输入“12”的时候，显示“12”的联想词汇“123”然后视图渲染。现在由于网络抖动，“12”的联想词结果早于“1”的结果返回，如何处理避免渲染错误？
+
+        3.怎么禁止让js读取cookie？怎么让cookie只在HTTPS下传输？
+     -->
+
+     <script>
+        //  1. 防抖和节流  防抖是一段时间之后一定会执行一次该函数，节流是在一段时间内函数一定会执行一次
+        // 防抖
+        function debounce(fn, ms){
+            let time = null;
+            return function(){
+                if(time){
+                    clearTimeout(time)
+                }
+                time = setTimeout(()=>{
+                    fn && fn.apply(this, [...arguments]);
+                }, ms);
+            }
+        }
+        // 节流
+        function throttle(fn, ms){
+            let preTime = +new Date;
+            return function(){
+                const nowTime = +new Date;
+                if(nowTime - preTime >= ms){
+                    fn && fn.apply(this, [...arguments]);
+                    preTime = nowTime;
+                }
+            }
+        }
+        // 2. 为防止网络抖动，每次请求发出之后可以将上一次请求抛弃 或者每次返回数据时判断是否是当前请求的数据如果不是将数据抛弃掉
+        // 3. 服务端将cookie 种下的时候  将cookie 设置为 httpOnly；标记为secure 的cookie 只能被HTTPS协议加密发送给服务端
+     </script>
+
+     <!-- 
+         一、客户端缓存有几种方式?浏览器出现 from disk、from memory 的 策略是啥?
+        二、说一下 CORS 的简单请求和复杂请求的区别?
+      -->
+
+      <!-- 
+          1. 强制缓存，协商缓存 出现 form disk, form memory 的策略是命中了强制缓存
+          2. cors 跨域请求发送时会先发送预检请求，服务器检测通过后 然后再发送正常请求
+       -->
+
+</body>
+</html>

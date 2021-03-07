@@ -59,7 +59,53 @@ function promiseAll2(promises) {
 }
 ```
 
-###### 3. 手写promise
+######  3. 手写promise.race
+
+```javascript
+function PromiseRace(list){
+    return new Promise((resolve, reject) =>{
+        for(let i = 0, len = list.length; i < len ;i++){
+            const temp = list[i];
+            list.then(res =>{
+                resolve(res);
+            }).catch(err =>{
+                reject(err);
+            })
+        }
+    });
+}
+```
+
+###### 4. 手写promise.finally
+
+```javascript
+const p = new Promise(resolve=>{
+    setTimeout(()=>{
+        resolve(100)
+    },1000)
+});
+
+
+
+
+Promise.prototype.myFinally = function(callback){
+    const P = this.constructor;
+
+    return this.then(
+        value => P.resolve(callback()).then(()=> value),
+        err =>  P.resolve(callback()).then(()=> {throw err})
+    )
+}
+
+
+p.myFinally(res =>{
+    console.log(res, 'finally');  // 100ms 之后输出 undefined
+}).then(res =>{
+    console.log(res, 'then')  // finally 之后输出 100
+});
+```
+
+###### 5. 手写promise
 
 ```javascript
 function CutePromise(executor){
@@ -195,7 +241,4 @@ CutePromise.prototype.then = function(onResolved, onRejected){
 }
 
 ```
-
-
-
 

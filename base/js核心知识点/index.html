@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>核心知识点</title>
+</head>
+<body>
+    <!-- 闭包  私有变量 -->
+    <script>
+        const User = (function(){
+            let _passport = null;
+
+            class _User {
+                constructor(name, passport){
+                    this.name = name;
+                    _passport =  passport;
+                }
+
+                login(){
+                    console.log(_passport, this.name);
+                }
+            }
+            return _User;
+        })();
+
+
+        const use = new User('test', 123456);
+        use.login();  // test 123456
+
+    </script>
+
+    <!-- 偏函数  函数柯里化 -->
+
+    <script>
+        // 柯里化定义 
+        function sub_curry(fn){
+            const args = [...arguments].slice(1);
+            return function(){
+                return fn.apply(this,args.concat([...arguments]));
+            }
+
+        }
+        function curry(fn, len){
+            const length = len || fn.length;
+            return function(){
+                const args = [...arguments];
+                if(args.length >= length){
+                    return fn.apply(this, args);
+                }else{
+                    return curry(sub_curry.apply(this, [fn,...args]), length - args.length)
+                }
+
+            }
+        }
+
+        function curry(fn){
+            const length = fn.length;
+            let args = [...arguments].slice(1);
+            return function curryFn(){
+                args  = args.concat([...arguments]);
+                if(args.length >= length){
+                    const temp = args;
+                    args = [];
+                    return fn.apply(this, temp);
+                }else{
+                    return curryFn;
+                }
+            }
+        }
+
+
+        const test = curry(function(a,b,c){
+            return [a,b,c];
+        });
+
+        console.log(test(1)(2)(3));
+        console.log(test(1,2)(3));
+        console.log(test(1,2,3));
+
+
+        // var theThing = null;
+        // var replaceThing = function () {
+        // var originalThing = theThing;
+        // var unused = function () {
+        //     if (originalThing) // 'originalThing'的引用
+        //     console.log("嘿嘿嘿");
+        // };
+        // theThing = {
+        //     longStr: new Array(1000000).join('*'),
+        //     someMethod: function () {
+        //     console.log("哈哈哈");
+        //     }
+        // };
+        // };
+        // setInterval(replaceThing, 1000);
+
+
+        // call  apply  bind
+
+        Function.prototype.myCall = function(context , ...args){
+            const fn = this;
+            if(context){
+                context.fn = fn;
+                const result = context.fn(...args);
+                delete context.fn;
+                return result;
+            }else{
+                return fn(...args)
+            }
+            
+        };
+
+
+        function testCall(){
+            console.log(this.name);
+            return this.name
+        }
+
+
+        const testName = testCall.myCall({name: 'testCall'});
+        console.log(testName, 'testname');
+
+        Function.prototype.myApply = function(context, args){
+            const fn = this;
+            if(context){
+                context.fn = fn;
+                const result = context.fn(...args);
+                delete context.fn;
+                return result;
+            }else{
+                return fn(...args)
+            }
+        }
+
+        Function.prototype.myBind = function(){
+            const params = [...arguments];
+            const context = params.slice(0,1)[0];
+            const args = params.slice(1);
+            const fn = this;
+            return function Fn(){
+                const newArgs = args.concat([...arguments]);
+                return  this instanceof Fn ? new fn(...arguments) :  fn.apply( context, newArgs);
+            }
+        }
+
+
+        // Function.prototype.myBind = function (context) {   
+        //         // 判断调用对象是否为函数   
+        //         if (typeof this !== "function") {     
+        //             throw new TypeError("Error");   
+        //         }   
+        //         // 获取参数   
+        //         var args = [...arguments].slice(1),fn = this;   
+        //         return function Fn() {     
+        //             // 根据调用方式，传入不同绑定值     
+        //             return fn.apply(this instanceof Fn ? new fn(...arguments) : context, args.concat(...arguments));   
+        //         } 
+        // }
+
+        function testBind (){
+            this.age = 18;
+            console.log(this.age, 'age', this.name, 'name')
+        }
+        // const tb = new testBind();
+
+        // testBind.apply(tb)
+
+        // function testBind2 () {
+        //     console.log(this.age);
+        // }
+
+        // const tb2 = testBind2.apply(new testBind());
+  
+
+        const Tb = testBind.myBind({ name: 'testBind' });
+        Tb();
+
+        const tb = new Tb();
+
+        console.log(tb, 'tb', tb.age)
+
+
+    </script>
+
+</body>
+</html>

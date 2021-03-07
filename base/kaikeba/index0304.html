@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 
+        1、什么是纯函数？使用纯函数有什么好处？
+        2、实现add(1)(2)(3)？
+        3、了解函数式编程中的 compose 吗?动手实现一下?
+     -->
+     <script>
+        //  1. 纯函数 就是相同的输入，会产生相同的输出。纯函数不会产生副作用，函数执行结果可控。
+
+        function add(){
+            let args = [...arguments];
+            
+            function _add(){
+                args = args.concat([...arguments]);
+                return _add;
+            };
+
+            _add.toString = function(){
+                return  args.reduce((val1, val2)=> val1 + val2,0);
+            }
+            return _add;
+        }
+
+        console.log(add(1)(2)(3));
+        console.log(add(1)(2)(3)(4));
+
+
+        // compose 组合任意个函数
+        function compose(){
+            const fnList = [].slice.call(arguments);
+            return function(x){
+                const runFnList = fnList.reverse();
+                const first = runFnList.slice(0,1)[0];
+                const others = runFnList.slice(1);
+                return others.reduce((result, pre) => pre(result), first(x));
+            }
+        }
+
+
+        var arr = [1, 2, 3],
+        reverse = function(x){ return x.reverse()},
+        getFirst = function(x) {return x[0]},
+        trace = function(x) {  console.log('执行结果：', x); return x}
+        
+        compseFunc = compose(trace);
+    
+        compseFunc(arr);    
+
+     </script>
+</body>
+</html>

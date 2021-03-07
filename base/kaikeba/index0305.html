@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 
+        问题1：按要求实现 go 函数？
+        // 示例
+        go("l"); //gol
+        go()("l"); //gool
+        go()()("l"); //返回goool
+
+        问题2：实现一个myMap函数,实现类似map功能？
+     -->
+
+
+    <script>
+        function go(){
+            let name = go.name + ([].slice.call(arguments).join('')||'o');
+            function _go(){
+                const args = [].slice.call(arguments).join('');
+                name += args ?  args : 'o';
+                return _go;
+            }
+            _go.toString = function(){
+                return name;
+            }
+            return _go;
+        }
+
+        console.log(go('l'))  // gol
+        console.log(go()("l")) // gool
+        console.log(go()()("l")) // goool
+        //  [1,2,3].map(()=>{}, this)
+        Array.prototype.myMap = function(fn, context){
+            const array = this;
+            const newArray = [];
+            for(let i = 0, len = array.length; i< len; i++){
+                const result = fn.call(context, array[i], i);
+                newArray.push(result);
+            }
+            return newArray;
+        }
+
+
+        const result = [1,2,3].myMap(val => val *2);
+        console.log(result, 'result');
+        const result1 = [{ name: 'test' }, { name: 'test2' }].myMap(function(val){ return { name: val.name, age: this.age }},{age: 20})
+        console.log(result1, 'result1');
+
+
+    </script>
+
+    <!-- 
+        1. Vue3 中 Teleport 的作用是什么?
+        2. 说一下vue3的composition api?
+        3. vue3中v-model的变化?
+     -->
+     <!-- 
+         1. Teleport 作用是可以将组件随意挂载到其他组件下面
+         2. reactive toRef setUp  
+         3. v-model 后面可以加参数  类似 v-model:name 这种写法
+      -->
+
+
+      <!-- <script>
+        //   class Arrow{
+        //     constructor(){
+        //         this.name = 'arrow'
+        //     }
+        //     sayHello(){
+        //         console.log(this.name, "====> sayHello");
+        //     }
+
+        //     sayArrowHello = ()=>{
+        //         console.log(this.name, "====> sayArrowHello");
+        //     }
+        // }
+
+        // var a = new Arrow();
+
+        // a.sayHello(); // arrow ====> sayHello
+        // a.sayArrowHello();  // arrow ====> sayArrowHello
+
+        // a.sayHello.call({ name:'obj Arrow' }); // obj Arrow ====> sayHello
+        // a.sayArrowHello.call({ name:'obj Arrow' }); // arrow ====> sayArrowHello
+
+
+        // const a1 = new Arrow();
+
+        // console.log(a.sayHello === a1.sayHello); // true
+        // console.log(a.sayArrowHello === a1.sayArrowHello);  // false
+
+        function Arrow4(){
+            this.name = 'hello arrow4'
+            this.sayHello5= function (){
+                console.log(this.name ,'sayHello5');
+            }
+            this.sayHello6 = () =>{
+                console.log(this.name ,'sayHello6');
+            }
+        }
+
+
+
+        Arrow4.prototype.sayHello = function(str){
+
+            console.log(this.name, 'hello wrap ', str)
+
+            function test(){
+                console.log(this.name, 'arrow4 Hello test', str);
+            }
+
+            test();
+
+        }
+
+        Arrow4.prototype.sayHello2 = function(str){
+            
+            console.log(this.name , ' hello2 wrap ', str);
+
+            var test = () =>{
+                console.log(this.name, 'arrow4 Hello test', str);
+            }
+
+            test();
+
+        }
+
+        Arrow4.prototype.sayHello3 = ()=>{
+            console.log(this.name, '======>arrow function')
+        }
+
+        const a4 = new Arrow4()
+
+        a4.sayHello('normal') // hello arrow4 hello wrap  normal // arrow4 Hello test normal
+        a4.sayHello2('normal')// hello arrow4  hello2 wrap  normal  // hello arrow4 arrow4 Hello test normal
+        a4.sayHello.call({ name: 'obj hello arrow4' }, 'obj') // obj hello arrow4 hello wrap  obj   // arrow4 Hello test obj
+        a4.sayHello2.call({ name:'obj hello arrow4 2' }, 'obj2') // obj hello arrow4 2  hello2 wrap  obj2  //  obj hello arrow4 2 arrow4 Hello test obj2
+        a4.sayHello5('normal'); // hello arrow4 sayHello5
+        a4.sayHello6('normal'); // hello arrow4 sayHello6
+        a4.sayHello5.call({ name: 'obj hello arrow4' }); // obj hello arrow4 sayHello5
+        a4.sayHello6({ name: 'obj hello arrow4' }); // hello arrow4 sayHello6
+
+
+        a4.sayHello3();
+        a4.sayHello3.call({ name:'arrow function' })
+      </script> -->
+
+
+      
+      <!-- <script>
+          var a = 5;
+          function test(a){
+              a = 10
+              console.log(a, 'inner'); // 10
+          }
+          test();
+          console.log(a, 'wrap') // 5
+
+
+          function testArguments(b){
+            arguments[0] = 20;
+            console.log(b, 'inner arguments') // 20
+          }
+          testArguments(a);
+          console.log(a, 'wrap arguments') // 5
+
+          var list = [];
+          function testArray(list){
+              list.push(10);
+              console.log(list,'inner'); // [10]
+          }
+          testArray(list);
+          console.log(list, 'wrap'); // [10]
+      </script> -->
+
+
+      <script>
+          const num = 2**53 -1;
+          console.log(num);
+          console.log(2**53 -1)
+      </script>
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3day</title>
+</head>
+<body>
+    <!-- 
+        1.什么是回调?回调使用中存在什么问题?
+        2.Promise.allSettled 了解吗？动手实现一下 Promise.allSettled?
+     -->
+
+
+     <!-- 
+        1. 定义：在异步函数内执行的函数叫回调，例如 发送xhr请求之后的返回结果需要用回调函数接收
+            问题：过多的回调会产生回调地狱，使代码难以维护，业务难以理解
+
+        
+        2. Promise.allSettled 是ES2020中的特性，会返回一个数组，数组中包含全部promise请求的返回值，无论promise状态是resolve或者reject都会返回
+      -->
+    <script>
+        function PromiseAllSettled(promiseList){
+            if(!Array.isArray(promiseList)){
+                throw ('arguments is need to be a list ')
+            }
+            const resultList = [];
+            let index = 0;
+            const length = promiseList.length;
+            return new Promise(resolve =>{
+                promiseList.forEach((promise, i) =>{
+                    const doResult = (result) =>{
+                        resultList[i] = result;
+                        if(index === length -1){
+                            resolve(resultList);
+                        }
+                        index++;
+                    }
+                    promise.then(result =>{
+                        doResult(Promise.resolve(result));
+                    }).catch(err =>{
+                        doResult(Promise.reject(err));
+                    })
+                })
+            })
+        }
+
+        const promiseList = [
+            Promise.resolve(1),
+            Promise.reject(new Error('error'))
+        ];
+
+        PromiseAllSettled(promiseList).then(res =>{
+            console.log(res);
+        })
+
+
+        // let arr = [1,2,3,4];
+        // let d = arr.map(async val =>{
+        //     let a = await new Promise((resolve, reject)=>{
+        //         setTimeout(()=>{
+        //             resolve(val);
+        //             console.log('111111');
+        //         },1000)
+        //     });
+        //     return a ;
+        // })
+
+        // console.log(d, 'd ');
+    </script>
+</body>
+</html>
