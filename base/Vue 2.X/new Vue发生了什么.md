@@ -348,10 +348,10 @@ export function proxy(target: Object, sourceKey: string, key: string) {
         const watcher = this._computedWatchers && this._computedWatchers[key]
         if (watcher) {
           if (watcher.dirty) {
-            // 通过get方法将watcher对象添加到依赖数据的dep中去，当依赖数据更新时同时通知computed的数据更新
+            // dirty 标记  标记 是否需要重新计算watcher的值
             watcher.evaluate()
           }
-          // 如果使用到了就收集
+          // 将computed中依赖到的响应式数据观察者中添加渲染
           if (Dep.target) {
             watcher.depend()
           }
