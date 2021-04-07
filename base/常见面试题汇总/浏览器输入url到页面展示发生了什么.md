@@ -36,7 +36,7 @@
     - 客户端向服务器发送  一个带 SYN=1 ， seq = X的数据包，（第一次握手由浏览器发起告诉服务器我准备发送请求了~）
     - 服务器回一个 SYN=1， ACK = X +1 , seq = Y的数据包（第二次握手 服务器告诉浏览器我准备好了，你快发送吧）
     - 客户端 再发送一个 ACK = Y+1, seq = Z 的数据包 （第三次握手 客户端发送  告诉服务器端 我马上就发送了 你准备接受吧）
-  
+
   - get post 区别
 
   - Http 请求相应信息
@@ -44,6 +44,34 @@
     - 缓存相关
 
       - 强缓存   Expries、cache-control
+
+        - Cache-control 请求指令
+
+          - max-age
+          - Max-stale
+          - Min-fresh
+          - No-cache
+          - No-store
+          - no-transform
+          - only-if-cached
+
+        - 缓存响应指令
+
+          - must-revalidate
+          - no-cache
+            - 在发布缓存副本之前，强制要求缓存把请求提交给原始服务器进行验证。
+          - No-store
+            - 缓存不应该存储有关客户端请求或者服务器响应的任何内容，即不使用任何缓存。
+          - No-transform
+          - public 
+            - 响应可以被任务对象缓存（发送请求的客户端，代理服务器等）
+          - private
+            - 只能被单个用户缓存，不能作为共享缓存（代理服务器不能缓存它）。私有缓存可以缓存响应内容。
+          - Proxy-revalidate
+          - Max-age
+          - S-maxage
+
+          
 
       - 协商缓存
 
