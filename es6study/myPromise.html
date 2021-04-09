@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 实现Promise
+        const PENDING = 'pending';
+        const FULLFILED = 'fullfiled';
+        const REJECTED = 'rejected'
+        class MyPromise{
+            constructor(executor){
+                this.status = PENDING;
+                this.value = null;
+                this.error = null;
+                this.resolvedList = [];
+                this.rejectedList = [];
+                executor(this.onFullFiled, this.onRejected);
+
+            }
+
+
+            static resolve (value) {
+                return new MyPromise(resolve =>{
+                    resolve(value)
+                });
+            }
+
+            onFullFiled = (value) =>{
+                if(this.status !== PENDING) return;
+                this.status = FULLFILED
+                this.value = value;
+                this.resolvedList.forEach(resolved => resolved());
+
+            }
+
+            onRejected = (error) =>{
+                if(this.status !==REJECTED) return;
+                this.status = REJECTED;
+                this.error = error;
+                this.rejectedList.forEach(reject => reject());
+            }
+
+            handleResolve = (callback, resolve, reject, promise) =>{
+                setTimeout(()=>{
+                    const x = callback(this.value);
+                    this.resolution(x, promise, resolve, reject)
+                },0)
+            }
+            handleReject = (callback, resolve, reject) =>{
+                setTimeout(()=>{
+                    const x = callback(this.error);
+                    this.resolution(x, promise, resolve, reject)
+                },0)
+            }
+
+            resolution = (x, promise , resolve, reject) =>{
+                let hasCalled = false;
+                if(x === promise){
+                    return reject(new TypeError ('error  '));
+                }else if ( x !=null &&(typeof x ==='object' || typeof x ==='function')){
+                    // 返回的可能是个promise对象
+                    let then = x.then;
+                    if(then){
+                        // 说明是个promise对象
+                        then.call(x, y=>{
+                            if(hasCalled) return;
+                            hasCalled = true;
+                            this.resolution(y, promise, resolve, reject)
+                        },err =>{
+                            if(hasCalled) return;
+                                hasCalled = true;
+                            reject(err);
+                        })
+                    }else {
+                        resolve(x)
+                    }
+                }else {
+                    resolve(x)
+                }
+            }
+
+            then = (resolvedCb, rejectedCb) =>{
+
+                var promise = new MyPromise((resolved, rejected) =>{
+                    if(typeof resolvedCb !='function'){
+                        resolvedCb = () =>{};
+                    }
+                    if(typeof rejectedCb !='function'){
+                        rejectedCb = () =>{};
+                    }
+                    if(this.status===FULLFILED){
+                        // 成功
+                        this.handleResolve(resolvedCb,resolved,rejected,promise);
+                    }else if (this.status === REJECTED){
+                        // 失败
+                        this.handleReject(rejectedCb,resolved,rejected,promise)
+                    }else {
+                        // pending
+                        this.resolvedList.push(()=>{
+                            this.handleResolve(resolvedCb, resolved, rejected,promise)
+                        });
+                        this.rejectedList.push(()=>{
+                            this.handleReject(rejectedCb, resolved, rejected,promise)
+                        });
+                    }
+
+                })
+                return promise;
+            }
+
+        }
+
+
+
+    
+    
+        var p1 = new MyPromise(resolved =>{
+            setTimeout(()=>{
+                resolved('hello');
+            },1000)
+        });
+        p1.then(value =>{
+            console.log(value, 'value')
+        })
+        p1.then(value =>{
+            console.log(value, 'value2')
+        });
+        p1.then(value =>{
+            return Promise.resolve(value+1);
+        }).then(value =>{
+            console.log(value, 'value 1111')
+        })
+
+        MyPromise.resolve(5).then(res =>{
+            console.log(res ,'res')
+        })
+    </script>
+</body>
+</html>
