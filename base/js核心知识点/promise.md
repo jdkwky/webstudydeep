@@ -66,7 +66,7 @@ function PromiseRace(list){
     return new Promise((resolve, reject) =>{
         for(let i = 0, len = list.length; i < len ;i++){
             const temp = list[i];
-            list.then(res =>{
+            temp.then(res =>{
                 resolve(res);
             }).catch(err =>{
                 reject(err);

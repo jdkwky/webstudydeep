@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 手写实现promise
+        // 构造函数
+        const PENDING= "pending";
+        const RESOLVED = "resolved";
+        const REJECTED = "rejected";
+
+        function MyPromise(executor){
+            this.status = PENDING;
+            this.rejectedList = [];
+            this.resolvedList = [];
+            this.value;
+            this.error;
+            const self = this;
+
+            function resolved(value){
+                if(self.status !== PENDING) return;
+                self.status = RESOLVED;
+                self.value = value;
+
+                self.resolvedList.forEach(cb => cb(self.value)) 
+                
+            }
+            function rejected(error){
+                if(self.status !== PENDING) return;
+                self.status = REJECTED;
+                self.error = error;
+
+                self.rejectedList.forEach(cb => cb(self.error)) 
+            }
+            executor(resolved, rejected);
+            
+        }
+        // 决议
+        function resolution(resultP , curP , resolved, rejected){
+            if(resultP === curP){
+                return rejected(new TypeError('错误'));
+            }else if ((typeof resultP === 'object' || typeof resultP === 'function') && resultP){
+                const then = resultP.then;
+                if(then && typeof then == 'function'){
+                    const rP = then.call(resultP);
+                    resolution(rP, curP,resolved, rejected);
+                }else{
+                    resolved(resultP);
+                }
+            }else{
+                resolved(resultP);
+            }
+        }
+        MyPromise.prototype.then = function(resolvedCallback, rejectedCallback){
+            if(typeof resolvedCallback !=="function"){
+                resolvedCallback = () =>{}
+            }
+            if(typeof rejectedCallback !=='function'){
+                rejectedCallback = () =>{}
+            }
+            function handleResolvedCallback(resolved, rejected, value){
+                setTimeout(()=>{
+                    const resultPromise = resolvedCallback(value);
+                    resolution(resultPromise, promise, resolved, rejected)
+                },0)
+            }
+            function handleRejectedCallback(resolved, rejected, error){
+                setTimeout(()=>{
+                    const err = resolvedCallback(error);
+                    rejected(err);
+                },0)
+            }
+            const self = this;
+
+            var promise = new MyPromise((resolved, rejected)=>{
+                if(self.status === PENDING){
+                    self.resolvedList.push((value)=>{
+                        handleResolvedCallback(resolved, rejected, value);
+                    });
+                    self.rejectedList.push((err)=>{
+                        handleRejectedCallback(resolved, rejected, err)
+                    })
+                }else if (self.status === RESOLVED){
+                    handleResolvedCallback( resolved, rejected, self.value);
+                }else {
+                    handleRejectedCallback( resolved, rejected, self.error);
+                }
+            });
+            return promise;
+        }
+
+        MyPromise.Resolve = function(value){
+            return new MyPromise(resolved =>{
+                resolved(value);
+            })
+        }
+
+        MyPromise.prototype.finally = function(cb){
+            const p = this.contructor;
+            return this.then(
+                value => p.Resolve(cb()).then(() => value) ,
+                err => p.Resolve(cb).then(()=> err)
+            )
+        }
+
+        // 测试用例
+        const p = new MyPromise((resolved) =>{
+            setTimeout(()=>{
+                resolved(10)
+            },1000)
+        });
+        p.then(value =>{
+            console.log(value, 'value')
+        }).then(value =>{
+            console.log(value, 'value')
+        }).then(()=>5).then(res =>{
+            console.log(res, 'res')
+        })
+        p.then(val =>{
+            console.log(val, 'val')
+        })
+
+    </script>
+</body>
+</html>
