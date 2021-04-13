@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- <script>
+      const str1 = 'person_first_name';
+      //  parseStrToCamelCase(str1); // 返回 'personFirstName'
+
+      function parseStrToCamelCase(str) {
+        let strs = str.split('_');
+        strs = strs.map((str, index) => {
+          if (index > 0) {
+            return str.slice(0, 1).toUpperCase() + str.slice(1);
+          }
+          return str;
+        });
+        return strs.join('');
+      }
+
+      function parseStrToCamelCase(str) {
+        return str
+          .replace(/(?<=_)([a-z]|[A-Z])/g, function (s1) {
+            return s1.toUpperCase();
+          })
+          .replace(/_/g, '');
+      }
+
+      const str2 = parseStrToCamelCase('person_first_name');
+    </script> -->
+    <!--  -->
+    <!-- <script>
+      // 数组flat polify
+      //  [1,2,4,[5,6,[7]]]
+      Array.prototype.myFlat = function (deep) {
+        const list = this;
+        let result = [];
+        for (let i = 0, len = list.length; i < len; i++) {
+          const temp = list[i];
+          if (deep) {
+            if (Array.isArray(temp)) {
+              const r = temp.myFlat(deep - 1);
+              result = result.concat(r);
+            } else {
+              result.push(temp);
+            }
+          } else {
+            result.push(temp);
+          }
+        }
+        return result;
+      };
+      const list = [1, 2, 4, [5, 6, [7, 8, [9]]]];
+      const resultList = list.myFlat(Infinity);
+      console.log(resultList);
+    </script> -->
+<!-- 
+    <script>
+      // 用最精炼的代码实现数组非零非负最小值index
+      // 例如：[10,21,0,-7,35,7,9,23,18] 输出5, 7最小
+
+      function getMinIndex(list) {
+        const result = [Infinity, -1];
+        for (let i = 0, len = list.length; i < len; i++) {
+          const temp = list[i];
+          if (temp > 0 && temp < result[0]) {
+            result[0] = temp;
+            result[1] = i;
+          }
+        }
+        if (result[1] > -1) {
+          return result[1];
+        } else {
+          return undefined;
+        }
+      }
+      const result = getMinIndex([-1]);
+      console.log(result, 'result');
+    </script> -->
+    <script>
+      const list = [1, 2, 3];
+      const square = (num) => {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(num * num);
+          }, 1000);
+        });
+      };
+
+      async function test() {
+        for(let i = 0 , len = list.length ; i < len ; i ++){
+            const x = list[i];
+            const res = await square(x);
+            console.log(res);
+        }
+      }
+      test();
+    </script>
+  </body>
+</html>
