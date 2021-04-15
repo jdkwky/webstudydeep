@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./index.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    index2 
+    <script>
+        // function receiveMessage(event){
+        //     console.log('on message',event);
+        //     // 我们能信任信息来源吗？
+            
+        //     // event.source 就当前弹出页的来源页面
+        //     // event.data 是 "hello there!"
+
+        //     // 假设你已经验证了所受到信息的origin (任何时候你都应该这样做), 一个很方便的方式就是把event.source
+        //     // 作为回信的对象，并且把event.origin作为targetOrigin
+        //     event.source.postMessage("hi there yourself!  the secret response " +
+        //                             "is: rheeeeet!",
+        //                             event.origin);
+        // }
+        document.addEventListener('myEvent', ()=>{
+            console.log('myEvent');
+        })
+
+        // window.addEventListener("message", receiveMessage, false);
+    </script>
+</body>
+</html>

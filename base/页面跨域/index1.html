@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./index.js"></script>
+</head>
+<body>
+    <script>
+
+        setInterval(()=>{
+            document.dispatchEvent(EVENT);
+        }, 0);
+        document.addEventListener('myEvent', ()=>{
+            console.log('myEvent');
+        })
+        // const open2  =  window.open('./index2.html');
+        // setInterval(() => {
+        //     open2.postMessage("hello", "http://127.0.0.1:8080");
+        // }, 100);
+
+        
+       
+
+        // open2.addEventListener("message", function(){
+        //     console.log('回来的数据')
+        // }, false);
+    </script>
+</body>
+</html>
