@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function rank(list, left, right){
+            if(left > right ) return;
+
+            let i = left; 
+            let j = right;
+            const temp = list[i];
+            while( i < j  && temp < list[j]){
+                j--;
+            }
+            list[i] = list[j];
+            list[j] = temp;
+
+            while( i < j && temp < list[i]){
+                i++;
+            }
+            list[i] = list[j];
+            list[j] = temp;
+            
+            if(i === j ){
+                rank(list, i +1, right);
+                rank(list, left, i -1 );
+            }
+
+        }
+    </script>
+</body>
+</html>
