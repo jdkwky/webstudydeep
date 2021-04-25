@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- 1 -->
+    <script>
+    //   中间件--promise
+
+      async function a(next) {
+          console.log('a-start')
+          await next()
+          console.log('a-end')
+      }
+
+      async function b(next) {
+          await sleep()
+          console.log('b-start')
+          await next()
+          console.log('b-end')
+      }
+
+      async function c(next) {
+          await sleep()
+          console.log('c-start')
+          await next()
+          console.log('c-end')
+      }
+
+
+      function sleep() {
+         return new Promise((resolve) => {
+             setTimeout(() => {
+              console.log('sleep')
+              resolve()
+              }, 2000)
+          })
+      }
+
+
+      const fnList = [a, b , c];
+      function compose(list){
+          let index = 0;
+          async function next(){
+              if(index <list.length){
+                const cb = list[index];
+                index++;
+                await cb(next);
+              }
+          }
+          next()
+      }
+
+      compose(fnList)
+    </script>
+  </body>
+</html>
