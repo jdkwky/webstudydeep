@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>array</title>
+</head>
+<body>
+    <script>
+        // reduce 
+        //  [].reduce((pre, next) =>  pre + next, 0)；
+        Array.prototype.myReduce = function(cb, initValue){
+            const list = this;
+            try{
+                let sum = pre= null;
+                for(let i = 0, len = list.length ; i < len; i ++){
+                    if(i == 0){
+                        pre = initValue;
+                    }
+                    sum = cb(pre, list[i]);
+                    pre  = sum;
+                }
+                return sum;
+            }catch(e){
+                console.error(e);
+            }
+        }
+        
+        const result1 = [{ value: 2 }, {value: 3}].myReduce((pre, next)=> pre+ next.value, 1);
+        console.log(result1, 'result1');
+
+        // 实现一个flat
+
+
+        // 实现一个批量请求函数 multiRequest(urls, maxNum)
+        // 要求如下：
+
+        // 要求最大并发数 maxNum
+
+        // 每当有一个请求返回，就留下一个空位，可以增加新的请求
+
+        // 所有请求完成后，结果按照 urls 里面的顺序依次打出
+
+        function multiRequest(urls, maxNum){
+            let index = 0;
+            const result = [];
+            function sendOtherUrl(url, resolve){
+                if(index == urls.length){
+                    resolve(result);
+                    return;
+                }
+                if(index < urls.length){
+                    const r = Promise.resolve(url).finally((res) =>{
+                        index++;
+                        sendOtherUrl(urls[index],resolve);
+                    });
+                    result.push(r);
+                }else{
+                    return;
+                }
+            }
+            return new Promise(resolve =>{
+                for(let i = 0 ; i < maxNum; i++){
+                    index = i;
+                    sendOtherUrl(urls[index], resolve);
+                }
+            });
+        }
+        const urls = [1,2,new Promise(resolve =>{
+            setTimeout(()=>{
+                resolve(3);
+            },3000)
+        }),4,5,6]
+        multiRequest(urls,2).then(pList =>{
+            Promise.all(pList).then(res =>{
+                console.log(res , 'res ');
+            })
+        });
+        
+    </script>
+</body>
+</html>

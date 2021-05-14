@@ -181,7 +181,7 @@ export function proxy(target: Object, sourceKey: string, key: string) {
     }
   ```
 
-  > - props 如果不是从data中获取的数据则不会被监听；如果没有传入props，则会给一个默认值该值是被监听的
+  > - props (如果不是从data中获取的数据则不会被监听 ❌ 也是会被监听)；如果没有传入props，则会给一个默认值该值是被监听的
   > - props数据流是从上自下单向流动的；如果props是值类型则不允许在组件中被修改，如果是引用类型的修改其中的属性值是不会报错的，也可以通过$set给引用类型赋值
   >
   > - 最后将props中的属性代理到当前Vue的实例上也就是this上

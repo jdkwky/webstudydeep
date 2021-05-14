@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>promise</title>
+</head>
+<body>
+    <script>
+        const PENDING = 'pending';
+        const RESOLVED = 'resolved';
+        const REJECTED = 'rejected';
+        function MyPromise(executor){
+            this.state = PENDING;
+            this.value = null;
+            this.error = null;
+            const self = this;
+
+            this.resolvedList = [];
+            this.rejectedList = [];
+
+            function onResolved (value) {
+                if(self.state !==PENDING) return;
+                self.state = RESOLVED;
+                self.value = value;
+                self.resolvedList.forEach(cb => cb());
+            }
+            function onRejected(error){
+                self.error = error;
+                if(self.state !==PENDING) return;
+                self.state = REJECTED;
+                self.resolvedList.forEach(cb => cb());
+            }
+
+            executor(onResolved, onRejected);
+        }
+
+        function reconcile (cbResult, promise, resolve, reject, value){
+            if(cbResult == promise){
+                reject(new TypeError('返回值不能是一个，会造成死循环'));
+            }else if (cbResult && (typeof cbResult == 'object' || typeof cbResult =='function') ){
+                const then = cbResult.then;
+                if(then && typeof then =='function'){
+                    then.call(cbResult,(x)=>{
+                        reconcile(x, promise, resolve, reject, value);
+                    },(err)=>{
+                        reject(err);
+                    });
+                    
+                }else{
+                    resolve(cbResult)
+                }
+            }else{
+                resolve(cbResult)
+            }
+        }
+
+        MyPromise.prototype.then = function(resolveCb, rejectCb){
+            if(typeof resolveCb !='function'){
+                resolveCb = () =>{}
+            }
+            if(typeof rejectCb != 'function'){
+                rejectCb = () =>{}
+            }
+            const self = this;
+            function runResolveCb (cb, resolve, reject, value){
+                setTimeout(()=>{
+                    try{
+                        const cbResult = cb(self.value);
+                        reconcile(cbResult, promise, resolve, reject,value);
+                    }catch(e){
+                        reject(e);
+                    }
+                }, 0);
+            }
+
+            function runRejectCb(cb, resolve, reject, error){
+                setTimeout(()=>{
+                    try{
+                        const cbResult = cb(error);
+                        reject(cbResult);
+                    }catch(e){
+                        reject(e);
+                    }
+                }, 0);
+            }
+            const promise = new MyPromise((resolve, reject) =>{
+                if(self.state === PENDING){
+                    self.resolvedList.push(()=>{
+                        runResolveCb(resolveCb, resolve, reject, self.value)
+                    });
+                    self.rejectedList.push(()=>{
+                        runRejectCb(rejectCb, resolve, reject, self.error)
+                    });
+                }else if ( self.state === RESOLVED ){
+                    runResolveCb(resolveCb, resolve, reject, self.value)
+                }else if (self.state === REJECTED){
+                    runRejectCb(rejectCb, resolve, reject, self.error)
+                }else{
+                    reject('unkonw');
+                }
+            })
+            return promise;
+        }
+
+
+        MyPromise.prototype.promiseAll = function (promiseList) {
+            const result = [];
+            return new MyPromise((resolve, reject) =>{
+                let index = 0;
+                const len = promiseList.length;
+                promiseList && promiseList.forEach((p, i) =>{
+                    
+                        p.then((res) =>{
+                            result[i] = res;
+                            if(index == len -1){
+                                console.log(result, 'result');
+                                resolve(result);
+                            }
+                            index++;
+                        }).catch(err =>{
+                            reject(err);
+                        });
+                    
+                    
+                })
+            })
+        }
+
+        MyPromise.prototype.finally = function(cb){
+            return this.then(
+                value =>{ MyPromise.Resolve(cb).then(()=> value) }, 
+                err =>{ MyPromise.Resolve(cb).then(()=> { throw err }) }
+            )
+        }
+
+
+        const mp = new MyPromise((resolve) =>{
+            setTimeout(()=>{
+                resolve(5);
+            },1000)
+        });
+
+        mp.then((value) =>{
+            console.log(value);
+        })
+        mp.then(value =>{
+            console.log(value, 'value2')
+            return value * 2
+        }).then((value)=>{
+            console.log(value, 'value3')
+            return new MyPromise(resolve =>{
+                setTimeout(()=>{
+                    resolve(15);
+                },1000)
+            })
+        }).then(value =>{
+            console.log(value, 'value4')
+        })
+        
+
+        const promiseList = [
+            Promise.resolve(1),
+            Promise.resolve(2),
+            Promise.resolve(3)
+        ];
+
+        mp.promiseAll(promiseList).then(res =>{
+            console.log(promiseAll, 'promiseAll')
+        });
+        
+    </script>
+</body>
+</html>

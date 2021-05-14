@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- JS实现一个带并发限制的异步调度器Scheduler，保证同时运行的任务最多有两个。完善代码中Scheduler类，使得以下程序能正确输出
+
+class Scheduler{
+add(promiseCreator) {
+...
+}
+// ...
+}
+const timeout = (time) => new Promise(resolve => {
+setTimeout(resolve, time)
+})
+const scheduler = new Scheduler()
+const addTask = (time, order) => {
+scheduler
+.add(() => timeout(time))
+.then(() =>console.log(order))
+}
+addTask(1000, '1')
+addTask(500, '2')
+addTask(300, '3')
+addTask(400, '4')
+// output: 2 3 1 4
+// 一开始，1、2两个任务进入队列
+// 500ms时，2完成，输出2，任务3进队
+// 800ms时，3完成，输出3，任务4进队
+// 1000ms时，1完成，输出1
+// 1200ms时，4完成，输出4 -->
+    <script>
+      class Scheduler {
+        cbList = [];
+        maxNum = 2;
+        hasRun = false;
+        runIndex = 0;
+        constructor() {
+          //   this.apply();
+        }
+
+        apply() {
+          const run = () => {
+            if (this.cbList.length) {
+              const { fn, resolve } = this.cbList.shift();
+              fn()
+                .then(() => {
+                  resolve();
+                })
+                .then(run);
+            }
+          };
+          while (this.runIndex < this.maxNum) {
+            run();
+            this.runIndex += 1;
+          }
+        }
+
+        add(promiseCreator) {
+          const p = new Promise((resolve) => {
+            if (this.cbList.length == 0) {
+              this.runIndex = 0;
+            }
+            this.cbList.push({
+              fn: promiseCreator,
+              resolve,
+            });
+          });
+          setTimeout(() => {
+            this.apply();
+          }, 0);
+          return p;
+        }
+        // ...
+      }
+      const timeout = (time) =>
+        new Promise((resolve) => {
+          setTimeout(resolve, time);
+        });
+      const scheduler = new Scheduler();
+      const addTask = (time, order) => {
+        scheduler.add(() => timeout(time)).then(() => console.log(order));
+      };
+      addTask(1000, '1');
+      addTask(500, '2');
+      addTask(300, '3');
+      addTask(400, '4');
+      let index = 5;
+      // setInterval(() => {
+      //   const result = 100 * Math.random();
+      //   addTask(result, `${index}`);
+      //   index++;
+      // }, 10);
+    </script>
+    <script>
+      async function async1() {
+        console.log('async1 start');
+        await async2();
+        console.log('async1 end');
+      }
+      async function async2() {
+        console.log('async2 start');
+        // return new Promise((resolve, reject) => {
+        //   resolve();
+        //   console.log('async2 promise');
+        // });
+      }
+      console.log('illegalscript start');
+      setTimeout(function () {
+        console.log('setTimeout');
+      }, 0);
+      async1();
+      new Promise(function (resolve) {
+        console.log('promise1');
+        resolve();
+      })
+        .then(function () {
+          console.log('promise2');
+        })
+        .then(function () {
+          console.log('promise3');
+        });
+      console.log('illegalscript end');
+    </script>
+  </body>
+</html>

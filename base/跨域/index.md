@@ -1,0 +1,6 @@
+- 跨域方式
+  - jsonP
+  - cros
+  - Window.postMessage
+  - Form 表单
+    - 表单跨域会将当前域中的cookie信息携带到发送请求中
