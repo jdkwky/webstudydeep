@@ -105,10 +105,10 @@ addTask(400, '4')
       }
       async function async2() {
         console.log('async2 start');
-        // return new Promise((resolve, reject) => {
-        //   resolve();
-        //   console.log('async2 promise');
-        // });
+        return new Promise((resolve, reject) => {
+          resolve();
+          console.log('async2 promise');
+        });
       }
       console.log('illegalscript start');
       setTimeout(function () {
@@ -126,6 +126,36 @@ addTask(400, '4')
           console.log('promise3');
         });
       console.log('illegalscript end');
+    </script>
+    <script>
+      // 在线编程：a~z 有 26个字母，按照 1~26 编码，现在给定一个数字字符串，输出所有可能的解码结果，如：输入 1234，输出 ['axd', 'abcd', 'lcd']
+      // 1234  
+      // 1,2,3,4 
+      // 12,3,4 
+      // 1, 23, 4
+      // 1,2 ,34 X
+      // 12, 34
+      
+      function format(list){
+        let result = [[list[0]]];
+        for(let i = 1, len = list.length; i< len; i++){
+          const wrap = list[i];
+          for(let j = 0, jLen = result.length; j< jLen; j++){
+            // const [...others, subStrLast] = result[j];
+            const others = result[j].slice(0, result[j].length-1)
+            const subStrLast = result[j].slice(result[j].length-1);
+            const num = Number(subStrLast + wrap);
+            if(num <=26){
+              result.push([...others, String(num)]);
+            }
+            result[j].push(wrap);
+          }
+        }
+        return result; 
+      }
+
+      const result = format('1234');
+      console.log(result, 'result');
     </script>
   </body>
 </html>
