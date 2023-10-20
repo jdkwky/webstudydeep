@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5.1.3 平移和旋转</title>
+</head>
+<body>
+    <canvas id="canvas" width="600" height="600" onmousemove="mouseMove(event)"></canvas>
+    <script src="./draw-core.js"></script>
+    <script>
+        render();
+        // doTransform(0, true);
+        // doTransform(20, true);
+        // doTransform(20, false);
+        // let radius = distance(0,0, $canvas.width * 0.5, $canvas.height * 0.5);
+        // strokeCircle(0, 0, radius, 'black');
+        // testFillLocalRectWithTitle();
+        // doLocalTransform();
+        // testFillLocalReectWithTitleUV();
+        // rotationAndRevolutionSimulation(200);
+        // draw4Quadrant()
+
+        const tank = new Tank();
+       
+        // tank.tankRotation = toRadian(30);
+        // tank.turretRotation = toRadian(-30);
+        // tank.draw();
+
+        const ta = new TestApplcication();
+
+        function mouseMove(evt) {
+            // const { clientX, clientY } = evt || {};
+            // console.log(evt, 'evt')
+            // tank.target.x = clientX;
+            // tank.target.y = clientY;
+            // tank._lookAt();
+            // tank._moveTowardTo();
+            
+            context2D.clearRect(0,0,$canvas.width,$canvas.height);
+            // render(); 
+            // tank.draw();
+            ta.dispatchMouseMove(evt)
+
+            
+        }
+
+        const T = mat2d.makeTranslation(200,100);
+        const v = vec2.create(100,200);
+        const tv = Math2D.transform(T,v);
+        console.log(tv, 'tv')
+    </script>
+</body>
+</html>

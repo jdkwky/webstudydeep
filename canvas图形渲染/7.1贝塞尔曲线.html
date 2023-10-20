@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贝塞尔曲线</title>
+</head>
+<body>
+    <canvas id="canvas" width="600" height="600"></canvas>
+    <script src="./draw-core.js"></script>
+
+    <script>
+        const q = new QuadraticBezierCurve(vec2.create(400,100),vec2.create(550,200), vec2.create(400, 300))
+        q.draw();
+
+        const c = new CubeBezierCurve(vec2.create(60,100), vec2.create(240,100),vec2.create(60,300),vec2.create(240,300));
+        c.draw();
+    </script>
+</body>
+</html>
